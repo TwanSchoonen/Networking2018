@@ -1,0 +1,3 @@
+* Supermarket stock refil
+* Supermarket theft prefention
+* Less abstract > more abstract
