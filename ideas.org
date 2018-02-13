@@ -1,3 +1,6 @@
 * Supermarket stock refil
 * Supermarket theft prefention
+* Selfdriving car on demand
+* Smart grid
+* 
 * Less abstract > more abstract
