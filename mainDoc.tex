@@ -1,0 +1,46 @@
+\documentclass{article}
+
+\usepackage{color}
+\usepackage{listings}
+\usepackage{courier}
+
+\title{Main document for idea: smart car on demand}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+Needed requirements:
+\begin{itemize}
+\item Socket, probable car control
+\item message queuing, ?
+\item web services (REST), the mobile app
+\end{itemize}
+
+
+main steps of a MVP:
+
+\begin{enumerate}
+\item costumer sends a request:
+  location destination number of pass.
+\item car receivers a request
+  all information is included
+\item car searches shortest path
+
+\item car picks up customer. and searches for the shortest / fastest path to the location.
+
+\item request is popped from queue and marked as done.
+
+\item Car returns to car center
+
+\end{enumerate}
+
+
+Notes on the first version:
+1 Car, 1 customer, a car center.
+
+Extensions:
+More cars, more customers, cars communicating to eachother about position in the city, 
+\end{document}
