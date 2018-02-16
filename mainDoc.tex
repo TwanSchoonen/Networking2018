@@ -1,26 +1,36 @@
-\documentclass{article}
+\documentclass[8pt]{article}
 
+\usepackage{extsizes}
 \usepackage{color}
 \usepackage{listings}
-\usepackage{courier}
 
-\title{Main document for idea: smart car on demand}
-\author{}
+
+\title{Smart car on demand}
+\author{Peri Rahamin (s2683523),\\
+  Jits Schildperoort (s2788659),\\
+  Twan Schoonen (s2756978)}
 \date{\today}
 
 \begin{document}
 
 \maketitle
 
-Needed requirements:
+\section{Introduction}
+
+Our general idea is to have self-driving cars drive through our city.
+If a customer wants to go somewhere using our service he/she will log in to our app, and select where he whats to go (we already know where he is).
+We then let him know how long he has to wait and manage that a car will pick him up.
+
+\section{Needed requirements}
+Although we don't have information about what the actual requirements mean yet, we think that we will use them in the following way.
 \begin{itemize}
-\item Socket, probable car control
-\item message queuing, ?
-\item web services (REST), the mobile app
+\item Socket, used for car control
+\item message queuing, used in car - person interaction
+\item web services (REST), used in the mobile app
 \end{itemize}
 
 
-main steps of a MVP:
+\section{Main steps of a MVP}
 
 \begin{enumerate}
 \item costumer sends a request:
@@ -37,10 +47,10 @@ main steps of a MVP:
 
 \end{enumerate}
 
-
-Notes on the first version:
-1 Car, 1 customer, a car center.
-
-Extensions:
-More cars, more customers, cars communicating to eachother about position in the city, 
+\section{Additional notes}
+We do not yet know the level of abstraction we are going to end up with. For our first version we will do the following:\\
+1 Car, 1 customer, a car center. \\
+No GUI just command line statements.\\
+After this working system we can start working on the following extensions:\\
+More cars, more customers, cars communicating to eachother about position in the city, option to send for cars, show a car grid, have actual car agents etc.
 \end{document}
