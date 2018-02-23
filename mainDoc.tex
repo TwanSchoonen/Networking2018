@@ -21,11 +21,13 @@ Our general idea is to have self-driving cars drive through our city.
 If a customer wants to go somewhere using our service he/she will log in to our app, and select where he whats to go (we already know where he is).
 We then let him know how long he has to wait and manage that a car will pick him up.
 
+Furthermore there will be car2car communication. This will include cars communication with each-other about location / district. So for example when a car need to pick up a customer and drive to some other district the cars will rearrange thru the city.
+
 \section{Needed requirements}
 Although we don't have information about what the actual requirements mean yet, we think that we will use them in the following way.
 \begin{itemize}
 \item Socket, used for car control
-\item message queuing, used in car - person interaction
+\item message queuing, used in car \- person interaction
 \item web services (REST), used in the mobile app
 \end{itemize}
 
@@ -33,10 +35,10 @@ Although we don't have information about what the actual requirements mean yet, 
 \section{Main steps of a MVP}
 
 \begin{enumerate}
-\item costumer sends a request:
-  location destination number of pass.
-\item car receivers a request
-  all information is included
+\item costumer sends a request, location destination number of pass.
+  
+\item car receivers a request all information is included
+  
 \item car searches shortest path
 
 \item car picks up customer. and searches for the shortest / fastest path to the location.
