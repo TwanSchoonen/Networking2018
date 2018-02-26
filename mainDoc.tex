@@ -1,4 +1,5 @@
 \documentclass[8pt]{article}
+\usepackage{enumitem}
 
 \usepackage{extsizes}
 \usepackage{color}
@@ -6,8 +7,8 @@
 
 
 \title{Smart car on demand}
-\author{Peri Rahamin (s2683523),\\
-  Jits Schildperoort (s2788659),\\
+\author{Peri Rahamin (s2683523),
+  Jits Schilperoort (s2788659),
   Twan Schoonen (s2756978)}
 \date{\today}
 
@@ -21,21 +22,20 @@ Our general idea is to have self-driving cars drive through our city.
 If a customer wants to go somewhere using our service he/she will log in to our app, and select where he whats to go (we already know where he is).
 We then let him know how long he has to wait and manage that a car will pick him up.
 
-Furthermore there will be car2car communication. This will include cars communication with each-other about location / district. So for example when a car need to pick up a customer and drive to some other district the cars will rearrange thru the city.
+Furthermore there will be car2car communication. This will include cars communication with each-other about location / district.
 
 \section{Needed requirements}
 Although we don't have information about what the actual requirements mean yet, we think that we will use them in the following way.
-\begin{itemize}
+\begin{itemize}[nolistsep]
 \item Socket, used for car control
 \item message queuing, used in car \- person interaction
 \item web services (REST), used in the mobile app
 \end{itemize}
 
-
 \section{Main steps of a MVP}
 
-\begin{enumerate}
-\item costumer sends a request, location destination number of pass.
+\begin{enumerate}[nolistsep]
+\item customer sends a request, location destination number of pass.
   
 \item car receivers a request all information is included
   
@@ -48,6 +48,11 @@ Although we don't have information about what the actual requirements mean yet, 
 \item Car returns to car center
 
 \end{enumerate}
+
+\section{car2car communication}
+Whenever a customer makes a request, the cars will have to communicate with each other in order to decide which of them should pick up the customer. This decision should at least be based on both the availability of the cars and the distance to the customer. 
+
+Whenever a change is made in the system (e.g. a customer is picked up), the cars should again be evenly distributed around the area. To coordinate this, it is also very important that they communicate with each other in order to figure out what their new path should be. 
 
 \section{Additional notes}
 We do not yet know the level of abstraction we are going to end up with. For our first version we will do the following:\\
