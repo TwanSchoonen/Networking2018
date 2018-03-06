@@ -32,7 +32,13 @@ Twan Schoonen (s2756978)
 \maketitle
 \section*{Week 2}
 \subsection*{Overview}
-This week we mainly focused on the architectural design of the project, a document with this design is supposed to be handed in this week. Furthermore we discussed the way in which we think we should implement the communication between subjects of the system. 
+\begin{itemize}
+	\item \textbf{Architectural design} This week we mainly focused on the architectural design of the project, a document with this design is supposed to be handed in this week.
+	\item \textbf{P2P}  Furthermore we discussed the way in which we think we should implement the communication between subjects of the system. It was suggested to us to think about p2p communication which we first considered in car2car communication. We found out that this would not be very efficient in our case (in autonomous driving it would, but we will not implement that). So now we considered implementing p2p as communication between multiple centers. Each city would have its own center which can communicate with the centers in other cities (p2p) in the case of intercity transportation.  
+	\item \textbf{Car sharing} We also considered the possibility of car sharing. Whenever a car is occupied but it is the nearest car to a new costumer, it should be possible to have the option of putting multiple customers in the same car. 
+	\item \textbf{Car hopping} Another extension of the system includes the possibility of car hopping. Especially in long drives it could be more efficient to put people together. So when, for example, two people have to go from city A to city B but they are at different positions in city A, they can be brought together and put in one car.
+\end{itemize}
+
 
 \subsection*{Tasks}
 \subsubsection*{Done}
@@ -40,8 +46,9 @@ This week we mainly focused on the architectural design of the project, a docume
     \item Decided on the way the central, the cars and the clients should communicate with each other
     \item Architectural design document
     \item Created more use cases
-    \item Chose between Star and P2P
+    \item Consider Star and P2P
     \item Reconsidered our view on car2car communication
+    \item Extended the idea of the system with car sharing and hopping
 \end{itemize}
 
 \subsubsection*{Future}
