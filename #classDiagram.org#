@@ -1,0 +1,32 @@
+#+begin_src plantuml :file classDiagram.png
+@startuml
+class Car {
+  Point Position
+  bool available
+  
+}
+
+class Center {
+  Car[] carList
+  orderCar(Point location, int numberOfPassengers, Point destination)
+
+}
+
+class App {
+
+}
+
+class Database {
+
+}
+
+App "1" -- "1" Center
+Center "1" -- "*" Car
+Center "1" -- "1" Database
+
+
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:classDiagram.png]]
