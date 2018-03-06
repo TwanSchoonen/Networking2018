@@ -1,0 +1,97 @@
+\documentclass[a4paper]{article}
+\usepackage{amsfonts}
+\usepackage{a4wide,times}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset{language=Java,
+  numberstyle=\footnotesize,
+  basicstyle=\footnotesize,
+  numbers= left,
+  stepnumber=1,
+  tabsize=2,
+  frame=shadowbox,
+  breaklines=true
+}
+
+
+\begin{document}
+
+\title{Net-computing\\
+Weekly progress report \#2
+}
+
+\date{6.3.2018}
+
+\author{Peri Rahamin (s2683423),\\
+Jits Schilperoort (s2788659),\\
+Twan Schoonen (s2756978)
+}
+
+
+\maketitle
+\section*{Week 2}
+\subsection*{Overview}
+This week we mainly focused on the architectural design of the project, a document with this design is supposed to be handed in this week. Furthermore we discussed the way in which we think we should implement the communication between subjects of the system. 
+
+\subsection*{Tasks}
+\subsubsection*{Done}
+\begin{itemize}
+    \item Decided on the way the central, the cars and the clients should communicate with each other
+    \item Architectural design document
+    \item Created more use cases
+    \item Chose between Star and P2P
+    \item Reconsidered our view on car2car communication
+\end{itemize}
+
+\subsubsection*{Future}
+\begin{itemize}
+    \item 
+\end{itemize}
+
+\subsection*{Work division}
+\begin{itemize}
+    \item Peri: Worked on architectural design: sequence diagram, use cases
+    \item Jits:
+    \item Twan: 
+\end{itemize}
+
+\section*{Week 1}
+\subsection*{Overview}
+This week we focused on the correct way of implementing the system. The complete project consists of a mobile application, Artificial Intelligence technologies, shortest distance calculations, wireless communication. We decided it is necessary to identify the parts of the system that are relevant for this course and, because of lack of time, implement these parts of the system alone.
+\\\\We analyzed each element of the system to decide on relevance:
+\begin{itemize}
+    \item \textbf{Mobile application:} Each costumer that is interested in getting a car to drive them uses a mobile app to make the order. A working app with an user friendly GUI is irrelevant for this course, so we decided to have some data structure that represents a user and has location and number of people who want to use the service instead.
+    \item \textbf{AI:} The automated driving cars should know how to drive on roads without the help of humans. The AI of the car should follow the law and consider other cars (agents) or people crossing the road in its surrounding. This part is obviously too much to implement, and since it is also irrelevant to this course, we decided to assume the AI works.
+    \item \textbf{Shortest distance algorithm:} We want the car to find the best route to reach its costumer, considering traffic and other parameters (such as construction that blocks the road). The algorithm helps deciding which car is most suitable to get to a costumer, in case there are few of them in different parts of the city. To make this work we need live data, so for this project, we only send messages with datasets we made ourselves, and leave out the complicated calculations.
+    \item \textbf{Wireless communication:} The cars should communicate with the center and with each other, deciding which costumer to get to first. We will implement this part of the system, that covers socket and message queuing.
+\end{itemize}
+
+\subsection*{Tasks}
+At the moment, we have made decisions about what we should implement and how, this of course might be subject to changes, but for now we have a direction we can follow.
+
+\subsubsection*{Done}
+\begin{itemize}
+    \item Have an overview of the complete project.
+    \item Idea description document.
+    \item Deciding on programming language for the project (python).
+\end{itemize}
+
+\subsubsection*{Future}
+This section will be more detailed as we move forward with the project.
+\begin{itemize}
+    \item Architectural design document
+    \item Car-Center communication.
+    \item Car-Costumer communication.
+    \item Car-Car communication.
+\end{itemize}
+
+\subsection*{Work division}
+So far, almost all of the work was done in meetings we had, where we discussed about how we should approach the problem. This week each member of the group invested between 3 to 4 hours.
+\begin{itemize}
+    \item Peri: Group meetings+documentation.
+    \item Jits: Group meetings+documentation.
+    \item Twan: Group meeting+initial version of the idea for project.
+\end{itemize}
+
+\end{document}
