@@ -19,7 +19,8 @@
 \begin{document}
 
 \title{Net-computing\\
-Architectural design document
+Architectural design document\\
+Smart car on demand
 }
 
 \date{\today}
@@ -33,8 +34,7 @@ Twan Schoonen (s2756978)
 
 
 \maketitle
-\section*{Smart car on demand}
-\subsection*{Project description}
+\section*{Project description}
 Smart car on demand is the name of our project idea to have self-driving cars drive through the city, and get ordered by customers who wish to go somewhere using this service. The order is done by a costumer logging in to a mobile application, and select their destination and number of passengers.
 
 The request has the user's location saved, is sent to the car center, that selects the nearest car that can handle the request. Payment is done via money that is saved in the app account (top up is required beforehand). Requests are handled in queue order (first order-first served, maybe we add some priority).
@@ -49,7 +49,7 @@ Since this is a big project, we will not implement all of the features, but only
 \end{itemize}
 %TODO: add more items to list
 
-\subsection*{Project requirements}
+\section*{Project requirements}
 %TODO: improve list
 The requirements that are implemented in this project are listed as follows:
 \begin{itemize}
@@ -58,23 +58,23 @@ The requirements that are implemented in this project are listed as follows:
     \item \textbf{Web services (REST):} the mobile app communicates with the database by using REST. This is used for getting client information.
 \end{itemize}
 
-\subsubsection*{Star vs P2P topology}
+\subsection*{Star vs P2P topology}
 \textbf{Star topology:} The star topology is used by the centers to control the cars. Here the cars only drive and all computing is done by the center.\\
 \textbf{P2P topology:} This method is used for center to center communication, so when a car leaves the district or city, the centers communicate to each other and swap cars.
 
 %TODO: more elaborated description of what information the cars share
-\subsection*{Component diagram}
+\section*{Component diagram}
 \includegraphics[width=1\textwidth]{../Diagrams/componentDiagram.png}
 
-\subsection*{Class diagram}
+\section*{Class diagram}
 \includegraphics[width=1\textwidth]{../Diagrams/classDiagram.png}
 
-\subsection*{Sequence diagrams}
-OrderCar:\\
+\section*{Sequence diagrams}
+\subsection*{OrderCar}
 \includegraphics[width=1\textwidth]{../Diagrams/orderCar.png}\\
-sendCar:\\
+\subsection*{SendCar}
 \includegraphics[width=1\textwidth]{../Diagrams/sendCar.png}\\
-registerClient:\\
+\subsection*{RegisterClient}
 \includegraphics[width=1\textwidth]{../Diagrams/registerClient.png}
 
 \end{document}
