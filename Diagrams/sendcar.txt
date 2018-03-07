@@ -1,0 +1,25 @@
+title Send car
+
+opt queue is not empty
+    Center->Center: dequeue(Client.location,numberOfPassengers,destination)
+    loop while there are no available cars
+        Center->Center: wait(ms)
+    end
+    loop for all available cars
+        Center->Center: findClosestCar(Client.location,carLocation)
+    end
+    Center->Car: sendOrder(Client.location,numberOfPassengers,destination)
+    Center->Area: isInArea(destination)
+    opt if destination is not in center's area
+        loop for all centers
+            Center->Center2: sendDestination(destination)
+            Center2->Area: isInArea(destination)
+        end
+        note right of Center2
+            Center2 is the center that
+            destination is in its area
+        end note
+        Center->Center2: putInCarList(Car)
+        Center->Center: removeFromCarList(Car)
+    end
+end

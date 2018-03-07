@@ -1,0 +1,4 @@
+title Order car
+
+App->Center: oderCar(Client,numberOfPassengers,destination)
+Center->Center: enqueue(Client,numberOfPassengers,destination)
