@@ -1,33 +1,64 @@
 #+begin_src plantuml :file classDiagram.png
 @startuml
+skinparam {
+  monochrome true
+}
+
 class Car {
   Point Position
   bool available
+  int numberOfPassengers
+  socket
+
+}
+
+class Area {
+  Point[] border
   
+  isInArea(Point point)
 }
 
 class Center {
-  Car[] carList
+  messageQueue
 
-  orderCar(Point location, int numberOfPassengers, Point destination)
-
-}
-
-class App {
+  orderCar(Client client, int numberOfPassengers, Point destination)
+  
 }
 
 class Database {
-  ClientInformation
+  REST support
+  getClientInformation(clientID);
+}
+
+class App {
+  
+}
+
+class Payment {
+  double balance
+  externalBankAPI
+
+  makeDeposit(double amount)
+  getCash(double amount)
 }
 
 class Client {
+  Point location
+  int[] optionArray
+  double balance
 
+  createClient(int[] OptionArray, double balance = 0)
+  addLocation(Point location)
+  serialize()
 }
 
+App "1" -- "*" Client
 App "1" -- "*" Center
 Center "1" -- "*" Car
+Center "1" -- "1" Area
 App "1" -- "1" Database
-
+Database "1" -- "*" Client
+Client "1" -- "1" Payment
 
 @enduml
 #+END_SRC
