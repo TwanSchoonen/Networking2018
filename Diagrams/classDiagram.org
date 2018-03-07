@@ -47,7 +47,7 @@ class Client {
   int[] optionArray
   double balance
 
-  createClient(int[] OptionArray, double balance = 0)
+  createClient(int[] optionArray, double balance = 0)
   addLocation(Point location)
   serialize()
 }

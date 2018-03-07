@@ -1,8 +1,22 @@
 #+BEGIN_SRC plantuml :file componentDiagram.png
 @startuml
-skinparam {
-  monochrome true
-}
+skinparam componentStyle uml2
 
-
+[Area] - [Center]
+[Center] - CenterSocket
+[Car] ..> CenterSocket : use
+[Center] - REST : use
+REST - [Database] : use
+[Center] ..> CarSocket : use
+CarSocket - [Car]
+[Center] ..> CenterSocket : use
+[Center] ..> MESSAGEQUEUE : use
+MESSAGEQUEUE - [Center]
+[App] - [Client]
+[Client] - [Database]
+@enduml
 #+END_SRC
+
+#+RESULTS:
+[[file:componentDiagram.png]]
+

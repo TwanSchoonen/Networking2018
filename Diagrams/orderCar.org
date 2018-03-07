@@ -1,0 +1,15 @@
+#+BEGIN_SRC plantuml :file orderCar.png
+loop over Center in centerlist
+App -> Center : bool correctCenter = center.isInArea(client.location) 
+end
+opt correctCenter == true
+  App->Center: orderCar(Client,numberOfPassengers,destination)
+  Center->Center: enqueue(Client,numberOfPassengers,destination)
+  App->App : stop
+end
+
+#+END_SRC
+
+#+RESULTS:
+[[file:orderCar.png]]
+

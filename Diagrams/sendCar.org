@@ -1,7 +1,7 @@
-title Send car
+#+BEGIN_SRC plantuml :file sendCar.png
 
 opt queue is not empty
-    Center->Center: dequeue(Client.location,numberOfPassengers,destination)
+    Center->Center: dequeue(Client,numberOfPassengers,destination)
     loop while there are no available cars
         Center->Center: wait(ms)
     end
@@ -23,3 +23,9 @@ opt queue is not empty
         Center->Center: removeFromCarList(Car)
     end
 end
+
+#+END_SRC
+
+#+RESULTS:
+[[file:sendCar.png]]
+
