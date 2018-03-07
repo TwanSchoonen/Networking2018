@@ -1,0 +1,13 @@
+#+begin_src plantuml :file registerClient.png
+@startuml
+[o->App : SignUp(clientInformation)
+create "Client"
+App -> Client : client = createClient(clientInformation)
+App -> Client : client.serialize()
+App -> Database : put(client)
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:registerClient.png]]
+
