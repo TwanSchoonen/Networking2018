@@ -46,15 +46,15 @@ Since this is a big project, we will not implement all of the features, but only
     \item \textbf{Mobile application:} Each costumer that is interested in getting a car to drive them uses a mobile app to make the order. A working app with an user friendly GUI is irrelevant for this course, so we decided to have some data structure that represents a user and has location and number of people who want to use the service instead.
     \item \textbf{AI:} The automated driving cars should know how to drive on roads without the help of humans. The AI of the car should follow the law and consider other cars (agents) or people crossing the road in its surrounding. This part is obviously too much to implement, and since it is also irrelevant to this course, we decided to assume the AI works.
     \item \textbf{Shortest distance algorithm:} We want the car to find the best route to reach its costumer, considering traffic and other parameters (such as construction that blocks the road). The algorithm helps deciding which car is most suitable to get to a costumer, in case there are few of them in different parts of the city. To make this work we need live data, so for this project, we only send messages with datasets we made ourselves, and leave out the complicated calculations.
-    \item \textbf{Wireless communication:} The cars should communicate with each other, deciding which costumer to get to first. We will implement this part of the system, that covers socket and message queuing.
 \end{itemize}
+%TODO: add more items to list
 
 \subsection*{Project requirements}
 %TODO: improve list
 The requirements that are implemented in this project are listed as follows:
 \begin{itemize}
-    \item \textbf{Socket:} used for center to car communication, also used for center to center communication.
-    \item \textbf{Message queuing:} the requests made by the mobile application are queued by the centers, the when there are available cars the center dequeus the order and communicates with the car.
+    \item \textbf{Socket:} used for center to car communication, also used for center to center communication. This is done when a destination is in an other center area then to location (longer drives).
+    \item \textbf{Message queuing:} the requests made by the mobile application are queued by the centers, the when there are available cars the center dequeus the order and communicates with the car. 
     \item \textbf{Web services (REST):} the mobile app communicates with the database by using REST. This is used for getting client information.
 \end{itemize}
 
@@ -70,9 +70,11 @@ The requirements that are implemented in this project are listed as follows:
 \includegraphics[width=1\textwidth]{../Diagrams/classDiagram.png}
 
 \subsection*{Sequence diagrams}
-\includegraphics[width=1\textwidth]{../Diagrams/orderCar.png}
-
-\includegraphics[width=1\textwidth]{../Diagrams/sendCar.png}
+OrderCar:\\
+\includegraphics[width=1\textwidth]{../Diagrams/orderCar.png}\\
+sendCar:\\
+\includegraphics[width=1\textwidth]{../Diagrams/sendCar.png}\\
+registerClient:\\
 \includegraphics[width=1\textwidth]{../Diagrams/registerClient.png}
 
 \end{document}

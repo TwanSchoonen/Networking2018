@@ -10,19 +10,24 @@ class Car {
   int numberOfPassengers
   socket
 
+  findRoute(Point destination)
 }
 
 class Area {
   Point[] border
   
-  isInArea(Point point)
 }
 
 class Center {
   messageQueue
 
-  orderCar(Client client, int numberOfPassengers, Point destination)
-  
+  enqueue(Client client, int numberOfPassengers, Point destination)
+  dequeue(Client client, int numberOfPassengers, Point destination)
+  findClosestCar(Point location, Point carLocation)
+  isInArea(Point point)
+  sendCar(Point location, int numberOfPassengers, Point destination)
+  putInCarList(Car car)
+  removeFromCarList(Car car) 
 }
 
 class Database {
@@ -32,6 +37,7 @@ class Database {
 
 class App {
   
+  orderCar(Client client, int numberOfPassengers, Point destination)
 }
 
 class Payment {

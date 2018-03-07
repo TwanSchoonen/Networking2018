@@ -5,7 +5,6 @@ end
 opt correctCenter == true
   App->Center: orderCar(Client,numberOfPassengers,destination)
   Center->Center: enqueue(Client,numberOfPassengers,destination)
-  App->App : stop
 end
 
 #+END_SRC
