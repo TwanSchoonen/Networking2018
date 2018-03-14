@@ -1,5 +1,6 @@
 #!/usr/bin/python3           # This is server.py file
 import socket                                         
+import messages
 
 # create a socket object
 serversocket = socket.socket(
@@ -22,6 +23,8 @@ while True:
 
    print("Got a connection from %s" % str(addr))
     
-   msg = 'Thank you for connecting'+ "\r\n"
+   #msg = 'Thank you for connecting'+ "\r\n"
+   order=messages.messages.dequeueOrder();
+   msg=messages.messages.orderToCar(order);
    clientsocket.send(msg.encode('ascii'))
    clientsocket.close()
