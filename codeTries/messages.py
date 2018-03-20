@@ -7,6 +7,6 @@ class messages:
 		return(location,numberOfPassengers,destination)
 	
 	@staticmethod
-	def orderToCar(location,numberOfPassengers,destination):
-		return(location,numberOfPassengers,destination)
+	def orderToCar(order):
+		return(order[0],order[1],order[2])
 		
