@@ -1,13 +1,11 @@
-#!venv/bin/python
+#!flask/bin/python
 import os, json
 from flask import Flask, jsonify, make_response, abort, request, url_for
-from flask_httpauth import HTTPBasicAuth
 
 USERS = []
 USERID = 0
 USERSFOLDER = '../testUsers/'
 
-app = Flask(__name__, static_url_path = "")
 auth = HTTPBasicAuth()
 
 def populate_users():
@@ -75,6 +73,11 @@ def create_task():
     USERS.append(user)
     return jsonify({'user': user}), 201
 
+
+app = Flask(__name__.split('.')[0])
+
 if __name__ == '__main__':
-    populate_users()
     app.run(debug = True)
+    populate_users()
+    user = data.UserData("dir")
+    print(user.name)

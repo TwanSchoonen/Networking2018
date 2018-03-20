@@ -1,0 +1,4 @@
+* What kind of webservices are there?
+* Do we need a database?
+* Does the webservice need to be online?
+* Is our client data receiving a good idea?
