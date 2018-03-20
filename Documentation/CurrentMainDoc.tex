@@ -47,10 +47,8 @@ Since this is a big project, we will not implement all of the features, but only
     \item \textbf{AI:} The automated driving cars should know how to drive on roads without the help of humans. The AI of the car should follow the law and consider other cars (agents) or people crossing the road in its surrounding. This part is obviously too much to implement, and since it is also irrelevant to this course, we decided to assume the AI works.
     \item \textbf{Shortest distance algorithm:} We want the car to find the best route to reach its costumer, considering traffic and other parameters (such as construction that blocks the road). The algorithm helps deciding which car is most suitable to get to a costumer, in case there are few of them in different parts of the city. To make this work we need live data, so for this project, we only send messages with datasets we made ourselves, and leave out the complicated calculations.
 \end{itemize}
-%TODO: add more items to list
 
 \section*{Project requirements}
-%TODO: improve list
 The requirements that are implemented in this project are listed as follows:
 \begin{itemize}
     \item \textbf{Socket:} used for center to car communication, also used for center to center communication. This is done when a destination is in an other center area then to location (longer drives).
@@ -62,7 +60,6 @@ The requirements that are implemented in this project are listed as follows:
 \textbf{Star topology:} The star topology is used by the centers to control the cars. Here the cars only drive and all computing is done by the center.\\
 \textbf{P2P topology:} This method is used for center to center communication, so when a car leaves the district or city, the centers communicate to each other and swap cars.
 
-%TODO: more elaborated description of what information the cars share
 \section*{Component diagram}
 \includegraphics[width=1\textwidth]{../Diagrams/componentDiagram.png}
 
@@ -70,12 +67,15 @@ The requirements that are implemented in this project are listed as follows:
 \includegraphics[width=1\textwidth]{../Diagrams/classDiagram.png}
 
 \section*{Sequence diagrams}
+\subsection*{RegisterClient}
+\includegraphics[width=1\textwidth]{../Diagrams/registerClient.png}\\
+The client requests to sign up. App creates new object Client with the client's data that contains their personal preferences and money balance in the account. Client object is serialized and put in the database.
+
 \subsection*{OrderCar}
 \includegraphics[width=1\textwidth]{../Diagrams/orderCar.png}\\
+When a costumer orders a car, the app first checks in which area the costumer is, to know to which center it should send the order. The app then sends the order that has the object Client, the number of passengers, and the destination to the center. The center enqueues the order.
 \subsection*{SendCar}
 \includegraphics[width=1\textwidth]{../Diagrams/sendCar.png}\\
-\subsection*{RegisterClient}
-\includegraphics[width=1\textwidth]{../Diagrams/registerClient.png}
+The entire use case starts only if queue is not empty. Center dequeues order. If there are no available cars, the center waits, and after this loop is terminated, it looks over the list of available cars, and finds the available car that is the closest to the client's location. The center sends the order to the car it found. The center checks if the destination is in its area, if not, the center sends the destination to all centers to check which one covers the area, and the car is removed from the list of the first center and entered to the list of the second center. 
 
 \end{document}
-
