@@ -32,7 +32,9 @@ class mapdetails:
 	@staticmethod
 	def makeCar(x,y):
 		cars.append((x,y))
+		
 
 	@staticmethod
 	def getCars():
 		return(cars)
+		
