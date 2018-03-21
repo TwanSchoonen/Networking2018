@@ -24,7 +24,7 @@ def home_user_amount():
     return "Amount of users: %s" % len(User.query.all())
 
 @people.route('/data', methods=['POST'])
-def new_user():
+def post_user():
     username = request.json.get('username')
     password = request.json.get('password')
     if username is None or password is None:
@@ -66,22 +66,23 @@ def delete_all_users():
     db.session.commit()
     return jsonify({'result': True})
 
-# #not done yet
-# @mod.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['PUT'])
-# def update_task(task_id):
-#     task = [task for task in tasks if task['id'] == task_id]
-#     if len(task) == 0:
-#         abort(404)
-#     if not request.json:
-#         abort(400)
-#     if 'title' in request.json and type(request.json['title']) != unicode:
-#         abort(400)
-#     if 'description' in request.json and type(request.json['description']) is not unicode:
-#         abort(400)
-#     if 'done' in request.json and type(request.json['done']) is not bool:
-#         abort(400)
-#     task[0]['title'] = request.json.get('title', task[0]['title'])
-#     task[0]['description'] = request.json.get('description', task[0]['description'])
-#     task[0]['done'] = request.json.get('done', task[0]['done'])
-#     return jsonify({'task': task[0]})
+@people.route('/data', methods=['PUT'])
+@auth.login_required
+def put_user():
+    # jsonify({'data': 'Hello, %s!' % g.user.username})
+    # task = [task for task in tasks if task['id'] == task_id]
+    # if len(task) == 0:
+    #     abort(404)
+    # if not request.json:
+    #     abort(400)
+    # if 'title' in request.json and type(request.json['title']) != unicode:
+    #     abort(400)
+    # if 'description' in request.json and type(request.json['description']) is not unicode:
+    #     abort(400)
+    # if 'done' in request.json and type(request.json['done']) is not bool:
+    #     abort(400)
+    # task[0]['title'] = request.json.get('title', task[0]['title'])
+    # task[0]['description'] = request.json.get('description', task[0]['description'])
+    # task[0]['done'] = request.json.get('done', task[0]['done'])
+    return jsonify({'task': 'not done'})
 
