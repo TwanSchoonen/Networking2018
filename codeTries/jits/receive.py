@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 import pika
 import time
-import request
+from car_request import Request
 
 
 def request_from_string(message):
-    return request.Request(message.split(', ')[0], message.split(', ')[1], message.split(', ')[2], message.split(', ')[3])
+    return Request(message.split(', ')[0], message.split(', ')[1], message.split(', ')[2], message.split(', ')[3], message.split(', ')[4])
 
 
 def find_car(rq):
-    print("based on the message by " + rq.name + ", " + rq.no_passengers + " persons have to be transported from " +
+    print("REQUEST = ")
+    print("based on the message by " + rq.user['user']['firstName'] + ", " + rq.no_passengers + " persons have to be transported from " +
           rq.location + " to " + rq.destination + ". Therefore car x is selected for the pickup")
 
 
@@ -33,6 +34,7 @@ def callback(ch, method, properties, body):
     find_car(req)
     time.sleep(5 + body.count(b'.'))
     print(" [x] Done")
+
 
 channel.basic_consume(callback,
                       queue=queue_name,
