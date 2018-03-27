@@ -7,7 +7,7 @@ from flask import jsonify
 import sys
 
 
-url = "http://127.0.0.1:5000/data"
+url = "http://145.97.186.245:5000/data"
 headers = {'content-type': 'application/json'}
 
 

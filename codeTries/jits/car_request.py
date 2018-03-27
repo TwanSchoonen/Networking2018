@@ -4,6 +4,10 @@ import sys
 import requests
 
 
+IP = "145.97.186.245"
+port = "5672"
+
+
 class Request:
     def __init__(self, username, location, center, no_passengers, destination):
         self.user_name = username
@@ -18,7 +22,7 @@ class Request:
 
 
 def enqueue(req):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=IP,port=port))
     channel = connection.channel()
 
     channel.exchange_declare(exchange='topic_logs',

@@ -12,6 +12,7 @@ def request_from_string(message):
 
 
 def find_car(rq):
+
     print("REQUEST = ")
     print("based on the message by " + rq.user_name + ", " + rq.no_passengers + " persons have to be transported from " +
           rq.location + " to " + rq.destination + ". Therefore car x is selected for the pickup")
