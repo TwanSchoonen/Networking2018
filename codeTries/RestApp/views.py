@@ -69,20 +69,18 @@ def delete_all_users():
 @people.route('/data', methods=['PUT'])
 @auth.login_required
 def put_user():
-    # jsonify({'data': 'Hello, %s!' % g.user.username})
-    # task = [task for task in tasks if task['id'] == task_id]
-    # if len(task) == 0:
-    #     abort(404)
-    # if not request.json:
+    user = User.query.filter_by(username=g.user.username).first()
+    if not request.json:
+        abort(400)
+    # if 'username' in request.json and type(request.json['username']) != unicode:
     #     abort(400)
-    # if 'title' in request.json and type(request.json['title']) != unicode:
-    #     abort(400)
-    # if 'description' in request.json and type(request.json['description']) is not unicode:
-    #     abort(400)
-    # if 'done' in request.json and type(request.json['done']) is not bool:
-    #     abort(400)
-    # task[0]['title'] = request.json.get('title', task[0]['title'])
-    # task[0]['description'] = request.json.get('description', task[0]['description'])
-    # task[0]['done'] = request.json.get('done', task[0]['done'])
-    return jsonify({'task': 'not done'})
+
+    username = request.json.get('username')
+    # password = request.json['password']
+
+    user.username = request.json.get('username')
+    # user.password_hash = password_hash(password)
+
+    # db.session.commit()
+    return jsonify({'user' : user.username})
 
