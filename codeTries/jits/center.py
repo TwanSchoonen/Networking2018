@@ -18,7 +18,7 @@ def find_car(rq):
           rq.location + " to " + rq.destination + ". Therefore car x is selected for the pickup")
 
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='0.0.0.0'))
 channel = connection.channel()
 
 channel.exchange_declare(exchange='topic_logs', exchange_type='topic')

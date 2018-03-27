@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 from database import db
 from flask import Flask
-import os.path
+import os.path, sys
 from views import people
 
 def create_app():
     app = Flask(__name__)
-    app.debug = True
     app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy dog'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
@@ -22,8 +21,11 @@ def setup_database(app):
 
 if __name__ == '__main__':
     app = create_app()
-    # Check if there already is a database file
     if not os.path.exists('db.sqlite'):
         setup_database(app)
-    app.run()
-    #app.run(host='0.0.0.0')
+    if len(sys.argv) > 1:
+        app.run(host='0.0.0.0')
+    else:
+        print("running debug mode enter argument for server")
+        app.debug = True
+        app.run()
