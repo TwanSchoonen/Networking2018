@@ -5,9 +5,11 @@ from car_request import Request
 
 
 def request_from_string(message):
+    print(message)
     msg = message.split(', ')
     req = Request(msg[0], msg[1], msg[2], msg[3], msg[4])
     return req
+
 
 def find_car(rq):
     print("REQUEST = ")
@@ -31,7 +33,7 @@ channel.queue_bind(exchange='topic_logs',
 
 def callback(ch, method, properties, body):
     print(" [x] Received %r%r" % (method.routing_key, body))
-    req = request_from_string(body)
+    req = request_from_string(body.decode("utf-8"))
     find_car(req)
     time.sleep(5 + body.count(b'.'))
     print(" [x] Done")
