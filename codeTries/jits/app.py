@@ -32,10 +32,10 @@ def option_menu(options, low, high):
         print("- To " + opt + ", press " + str(cnt))
         cnt += 1
 
-    decision = int(raw_input("Option: "))
+    decision = int(input("Option: "))
     while illegal_option(decision, low, high):
         print("Illegal option '" + str(decision) + "'. Please ty again")
-        decision = int(raw_input("Option: "))
+        decision = int(input("Option: "))
 
     return decision
 
@@ -46,12 +46,12 @@ def find_nearest_center(lctn):
 
 def new_request(user):
     print("Creating a new request...")
-    location = raw_input("Location: ")
-    no_passengers = raw_input("Number of passengers: ")
+    location = input("Location: ")
+    no_passengers = input("Number of passengers: ")
     while illegal_option(no_passengers, 1, 3):
         print("Number of passengers (" + no_passengers + ") illegal. Please enter a number between 1 and 3.")
-        no_passengers = raw_input("Number of passengers: ")
-    destination = raw_input("Destination: ")
+        no_passengers = input("Number of passengers: ")
+    destination = input("Destination: ")
 
     req = Request(user.user_name, location, find_nearest_center(location), no_passengers, destination)
     enqueue(req)
@@ -68,8 +68,8 @@ def create_new_user(nm):
         "dateOfRegister": "21/3/2018",
         "firstName": nm,
         "lastLogin": "21/3/2018",
-        "lastName": raw_input("Last name: "),
-        "telephone": raw_input("Phone number: "),
+        "lastName": input("Last name: "),
+        "telephone": input("Phone number: "),
         'usrId': userID,
     }
     return jsonify({'user': new_user}), 201
@@ -86,7 +86,7 @@ def exists(nm):
     if 'user' in req:
         print("User " + nm + " exists")
         return True
-    print "User " + nm + " does not yet exist"
+    print("User " + nm + " does not yet exist")
     return False
 
 
@@ -99,7 +99,7 @@ def switch_user():
 
 
 def delete_account(current_user):
-    auth = (current_user.user_name, raw_input("You want to delete your account, please reenter your password: "))
+    auth = (current_user.user_name, input("You want to delete your account, please reenter your password: "))
     res = requests.delete(url, auth=auth, headers=headers)
 
     print(res)
@@ -130,13 +130,13 @@ def make_user(res_json):
 
 
 def register_new_user():
-    username = raw_input("Username: ")
+    username = input("Username: ")
     while username == "":
-        username = raw_input("Username: ")
+        username = input("Username: ")
 
-    password = raw_input("Password: ")
+    password = input("Password: ")
     while password == "":
-        password = raw_input("Password: ")
+        password = input("Password: ")
 
     data = {"username": username, "password": password}
 
@@ -149,12 +149,12 @@ def register_new_user():
 
 
 def log_in():
-    auth = (raw_input("Username: "), raw_input("Password: "))
+    auth = (input("Username: "), input("Password: "))
 
     res = requests.get(url, auth=auth)
     while res.status_code == 401:
         print("bad request")
-        auth = (raw_input("Username: "), raw_input("Password: "))
+        auth = (input("Username: "), input("Password: "))
         res = requests.get(url, auth=auth, headers=headers)
 
     print(res.json())

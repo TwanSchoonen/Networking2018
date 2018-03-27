@@ -5,12 +5,13 @@ from car_request import Request
 
 
 def request_from_string(message):
-    return Request(message.split(', ')[0], message.split(', ')[1], message.split(', ')[2], message.split(', ')[3], message.split(', ')[4])
-
+    msg = message.split(', ')
+    req = Request(msg[0], msg[1], msg[2], msg[3], msg[4])
+    return req
 
 def find_car(rq):
     print("REQUEST = ")
-    print("based on the message by " + rq.user['user']['firstName'] + ", " + rq.no_passengers + " persons have to be transported from " +
+    print("based on the message by " + rq.user_name + ", " + rq.no_passengers + " persons have to be transported from " +
           rq.location + " to " + rq.destination + ". Therefore car x is selected for the pickup")
 
 
@@ -22,7 +23,7 @@ channel.exchange_declare(exchange='topic_logs', exchange_type='topic')
 result = channel.queue_declare(exclusive=True)
 queue_name = result.method.queue
 
-binding_key = raw_input("Name of this center: ")
+binding_key = input("Name of this center: ")
 channel.queue_bind(exchange='topic_logs',
                    queue=queue_name,
                    routing_key=binding_key)
