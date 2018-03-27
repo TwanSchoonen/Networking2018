@@ -5,7 +5,8 @@ import json
 from flask import jsonify
 
 
-IP = "http://127.0.0.1:5000/data/"
+url = "http://127.0.0.1:5000/data"
+headers = {'content-type': 'application/json'}
 
 
 def represents_int(s):
@@ -59,13 +60,14 @@ def create_new_user(nm):
     return jsonify({'user': new_user}), 201
 
 
+
 def track_ride():
     print("Tracking ride...")
 
 
 def exists(nm):
     print("Checking if user exists...")
-    req = requests.get(IP + nm).json()
+    req = requests.get(IP + nm)#.json()
     if 'user' in req:
         print("User " + nm + " exists")
         return True
@@ -85,17 +87,56 @@ def user_details():
     print("Showing user details...")
 
 
-name = raw_input("Username: ")
-print("Ignoring input '" + name + "', username not implemented yet")
-password = raw_input("Password: ")
-print("Ignoring input '" + password + "', password not implemented yet")
+def make_user(res_json):
+    print(res_json)
+    print(res_json["username"])
+    return 'a'
 
 
-if exists(name):
-    print("Retrieving user " + name + "...")
-    user = requests.get(IP + name).json()
-else:
-    user = create_new_user(name)
+def register_new_user():
+    username = raw_input("Username: ")
+    while username == "":
+        username = raw_input("Username: ")
+
+    password = raw_input("Password: ")
+    while password == "":
+        password = raw_input("Password: ")
+
+    data = {"username": username, "password": password}
+
+    print("data = " )
+    print(json.dumps(data))
+    print(jsonify({'username': username, 'password': password}))
+
+    res = requests.post(url, data=json.dumps(data), headers=headers)
+    print("res = ")
+    print(res)
+
+    return make_user(res.json())
+
+
+def log_in():
+    auth = (raw_input("Username: "), raw_input("Password: "))
+
+    res = requests.get(url, auth=auth)
+    while res.status_code == 401:
+        print("bad request")
+        auth = (raw_input("Username: "), raw_input("Password: "))
+        res = requests.get(url, auth=auth, headers=headers)
+
+    print(res.json())
+    return make_user(res.json())
+
+
+#             start here             #
+option = raw_input("- To register a new user, press '1'\n- To log in, press '2'.\n")
+while illegal_option(option, 1,2):
+    option = raw_input("- To register a new user, press '1'\n- To log in, press '2'.\n")
+
+if int(option) == 1:
+    current_user = register_new_user()
+elif int(option) == 2:
+    current_user = log_in()
 
 
 while True:
