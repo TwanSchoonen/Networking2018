@@ -52,7 +52,7 @@ def delete_user():
     user = User.query.filter_by(username=g.user.username).first()
     db.session.delete(user)
     db.session.commit()
-    return jsonify({'result': True})
+    return jsonify({'result': True}), 201
 
 @people.route('/dataall', methods=['DELETE'])
 @auth.login_required
