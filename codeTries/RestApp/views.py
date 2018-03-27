@@ -1,6 +1,6 @@
 from database import db
 from user import User
-from authorization import auth
+from authorization import auth, super
 
 from flask import Flask, abort, request, jsonify, g, url_for, make_response
 from flask.blueprints import Blueprint
@@ -42,7 +42,7 @@ def get_user():
     return jsonify({'username': g.user.username})
 
 @people.route('/dataall', methods=['GET'])
-@auth.login_required
+@super.login_required
 def get_all_users():
     return jsonify({'data': '%s' % User.query.all()})
     
