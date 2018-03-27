@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import pika
 import time
+import sys
 from car_request import Request
 
 
@@ -10,15 +11,21 @@ def request_from_string(message):
     req = Request(msg[0], msg[1], msg[2], msg[3], msg[4])
     return req
 
-
 def find_car(rq):
-
     print("REQUEST = ")
     print("based on the message by " + rq.user_name + ", " + rq.no_passengers + " persons have to be transported from " +
           rq.location + " to " + rq.destination + ". Therefore car x is selected for the pickup")
 
-
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='0.0.0.0'))
+if len(sys.argv) > 1:
+    # example login
+    credentials = pika.PlainCredentials('guest','guest')
+    # first argument is a string
+    print("seting up connection to: " + str(sys.argv[1]))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(str(sys.argv[1]), credentials=credentials))
+else:
+    print("connect to localhost, to connect to url add an argument")
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    
 channel = connection.channel()
 
 channel.exchange_declare(exchange='topic_logs', exchange_type='topic')
