@@ -55,13 +55,13 @@ def delete_user():
     return jsonify({'result': True}), 201
 
 @people.route('/dataall', methods=['DELETE'])
-@auth.login_required
+@super.login_required
 def delete_all_users():
     users = User.query.all()
     for user in users:
         db.session.delete(user)
     db.session.commit()
-    return jsonify({'result': True})
+    return jsonify({'result': True}), 201
 
 @people.route('/data', methods=['PUT'])
 @auth.login_required
