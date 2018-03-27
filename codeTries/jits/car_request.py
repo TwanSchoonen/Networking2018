@@ -3,8 +3,6 @@ import pika
 import sys
 import requests
 
-IP = "http://127.0.0.1:5000/data/"
-
 
 class Request:
     def __init__(self, username, location, center, no_passengers, destination):
@@ -15,6 +13,7 @@ class Request:
         self.destination = destination
 
     def to_string(self):
+        print("self: " + ", ".join([self.user_name, self.location, self.center, self.no_passengers, self.destination]))
         return ", ".join([self.user_name, self.location, self.center, self.no_passengers, self.destination])
 
 
