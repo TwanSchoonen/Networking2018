@@ -3,6 +3,7 @@ import user
 import requests
 import json
 from flask import jsonify
+import sys
 
 
 url = "http://127.0.0.1:5000/data"
@@ -25,6 +26,20 @@ def illegal_option(opt, low, high):
     return False
 
 
+def option_menu(options, low, high):
+    cnt = 1
+    for opt in options:
+        print("- To " + opt + ", press " + str(cnt))
+        cnt += 1
+
+    decision = int(raw_input("Option: "))
+    while illegal_option(decision, low, high):
+        print("Illegal option '" + str(decision) + "'. Please ty again")
+        decision = int(raw_input("Option: "))
+
+    return decision
+
+
 def find_nearest_center(lctn):
     return lctn
 
@@ -38,7 +53,7 @@ def new_request(user):
         no_passengers = raw_input("Number of passengers: ")
     destination = raw_input("Destination: ")
 
-    req = Request(user, location, find_nearest_center(location), no_passengers, destination)
+    req = Request(user.user_name, location, find_nearest_center(location), no_passengers, destination)
     enqueue(req)
 
     print("New request: " + req.to_string())
@@ -83,14 +98,35 @@ def switch_user():
     print("Switch user")
 
 
-def user_details():
-    print("Showing user details...")
+def delete_account(current_user):
+    auth = (current_user.user_name, raw_input("You want to delete your account, please reenter your password: "))
+    res = requests.delete(url, auth=auth, headers=headers)
+
+    print(res)
+    if res.status_code == 201:
+        return True
+
+    return False
+
+
+def user_details(current_user):
+    opts = ["change password/username", "delete account", "go back"]
+    opt = option_menu(opts, 1, 3)
+    if opt == 1:
+        pass
+    elif opt == 2:
+        if delete_account(current_user):
+            return True
+    elif opt == 3:
+        pass
+    return False
 
 
 def make_user(res_json):
+    print("make user:")
     print(res_json)
-    print(res_json["username"])
-    return 'a'
+    usr = res_json["username"]
+    return user.User(usr)
 
 
 def register_new_user():
@@ -106,11 +142,8 @@ def register_new_user():
 
     print("data = " )
     print(json.dumps(data))
-    print(jsonify({'username': username, 'password': password}))
 
     res = requests.post(url, data=json.dumps(data), headers=headers)
-    print("res = ")
-    print(res)
 
     return make_user(res.json())
 
@@ -128,39 +161,52 @@ def log_in():
     return make_user(res.json())
 
 
-#             start here             #
-option = raw_input("- To register a new user, press '1'\n- To log in, press '2'.\n")
-while illegal_option(option, 1,2):
-    option = raw_input("- To register a new user, press '1'\n- To log in, press '2'.\n")
+def show_database():
+    auth = ("root", "root")
 
-if int(option) == 1:
-    current_user = register_new_user()
-elif int(option) == 2:
-    current_user = log_in()
+    res = requests.get(url + "all", auth=auth, headers=headers)
+    print(res.json())
 
 
-while True:
-    option = raw_input("- To request a new ride, press '1'\n- To track your ride, press '2'.\n"
-                       "- To see the map, press '3'.\n- To see/change your account details, press '4'.\n"
-                       "- To switch user, press '5'.\n- To log out press '6'.\n")
+def show_admin_options():
+    print("admin options")
 
-    while illegal_option(option, 1, 5):
-        print("The picked option (" + option + ") is illegal.")
-        option = raw_input("- To request a new ride, press '1'\n- To track your ride, press '2'.\n"
-                           "- To see the map, press '3'.\n- To see/change your account details, press '4'.\n"
-                           "- To switch user, press '5'\n- To log out press '6'.\n")
 
-    opt = int(option)
-    if opt == 1:
-        new_request(user['user']['firstName'])
-    elif opt == 2:
-        track_ride()
-    elif opt == 3:
-        show_map()
-    elif opt == 4:
-        user_details()
-    elif opt == 5:
-        switch_user()
-    elif opt == 6:
-        print("Logging out...")
-        break
+def main(argv):
+    while True:
+        if len(argv) == 2 and argv[1] == "admin":
+            show_admin_options()
+            break
+
+        opts = ["register a new user", "log in", "exit"]
+        opt = option_menu(opts, 1, 3)
+        if opt == 1:
+            current_user = register_new_user()
+        elif opt == 2:
+            current_user = log_in()
+        elif opt == 3:
+            print("Bye bye...")
+            break
+
+        log_out = False
+        while True:
+            opts = ["request a new ride", "track your ride", "see the map", "see/change your account details", "log out"]
+            opt = option_menu(opts, 1, 5)
+            if opt == 1:
+                new_request(current_user)
+            elif opt == 2:
+                track_ride()
+            elif opt == 3:
+                show_map()
+            elif opt == 4:
+                log_out = user_details(current_user)
+            elif opt == 5:
+                log_out = True
+
+            if log_out:
+                print("Logging out...")
+                break
+
+
+if __name__ == "__main__":
+    main(sys.argv)
