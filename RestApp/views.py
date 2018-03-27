@@ -71,13 +71,10 @@ def put_user():
         abort(400)
     # if 'username' in request.json and type(request.json['username']) != unicode:
     #     abort(400)
-
-    username = request.json.get('username')
-    password = request.json.get('password')
-
+    
     user.username = request.json.get('username')
-    user.password_hash = password_hash(password)
+    user.password_hash = password_hash(request.json.get('password'))
 
     db.session.commit()
-    return jsonify({'user' : user.username})
+    return jsonify({'user' : user.username}), 201
 
