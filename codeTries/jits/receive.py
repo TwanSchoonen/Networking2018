@@ -31,7 +31,9 @@ channel.queue_bind(exchange='topic_logs',
 
 def callback(ch, method, properties, body):
     print(" [x] Received %r%r" % (method.routing_key, body))
-    req = request_from_string(body)
+    msg = body.decode("utf-8")
+    print(" body = %r" % msg)
+    req = request_from_string(msg)
     find_car(req)
     time.sleep(5 + body.count(b'.'))
     print(" [x] Done")

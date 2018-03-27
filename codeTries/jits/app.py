@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from car_request import Request, enqueue
 import user
 import requests
@@ -53,7 +54,10 @@ def new_request(user):
         no_passengers = input("Number of passengers: ")
     destination = input("Destination: ")
 
+    # print(user.user_name, location, fin)
+    
     req = Request(user.user_name, location, find_nearest_center(location), no_passengers, destination)
+    print("req = "  + str(req))
     enqueue(req)
 
     print("New request: " + req.to_string())
