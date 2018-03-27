@@ -2,7 +2,6 @@ from database import db
 from user import User
 from authorization import auth
 
-import os
 from flask import Flask, abort, request, jsonify, g, url_for, make_response
 from flask.blueprints import Blueprint
 
@@ -23,6 +22,7 @@ def not_found(error):
 def home_user_amount():
     return "Amount of users: %s" % len(User.query.all())
 
+# Post method
 @people.route('/data', methods=['POST'])
 def post_user():
     username = request.json.get('username')
@@ -42,7 +42,7 @@ def post_user():
 @people.route('/data', methods=['GET'])
 @auth.login_required
 def get_user():
-    return jsonify({'data': 'Hello, %s!' % g.user.username})
+    return jsonify({'username': g.user.username})
 
 @people.route('/dataall', methods=['GET'])
 @auth.login_required
@@ -76,11 +76,11 @@ def put_user():
     #     abort(400)
 
     username = request.json.get('username')
-    # password = request.json['password']
+    password = request.json.get('password')
 
     user.username = request.json.get('username')
-    # user.password_hash = password_hash(password)
+    user.password_hash = password_hash(password)
 
-    # db.session.commit()
+    db.session.commit()
     return jsonify({'user' : user.username})
 
