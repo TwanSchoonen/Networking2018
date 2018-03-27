@@ -7,7 +7,7 @@ from flask import jsonify
 import sys
 
 
-url = "http://145.97.186.245:5000/data"
+url = "http://192.168.0.109:5000/data"
 headers = {'content-type': 'application/json'}
 
 
@@ -53,11 +53,8 @@ def new_request(user):
         print("Number of passengers (" + no_passengers + ") illegal. Please enter a number between 1 and 3.")
         no_passengers = input("Number of passengers: ")
     destination = input("Destination: ")
-
-    # print(user.user_name, location, fin)
     
     req = Request(user.user_name, location, find_nearest_center(location), no_passengers, destination)
-    print("req = "  + str(req))
     enqueue(req)
 
     print("New request: " + req.to_string())
@@ -151,16 +148,14 @@ def register_new_user():
 
     return make_user(res.json())
 
-
 def log_in():
     auth = (input("Username: "), input("Password: "))
-
     res = requests.get(url, auth=auth)
     while res.status_code == 401:
         print("bad request")
         auth = (input("Username: "), input("Password: "))
         res = requests.get(url, auth=auth, headers=headers)
-
+        
     print(res.json())
     return make_user(res.json())
 

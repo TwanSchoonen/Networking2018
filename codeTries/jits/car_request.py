@@ -4,8 +4,7 @@ import sys
 import requests
 
 
-IP = "145.97.186.245"
-port = "5672"
+IP = "192.168.0.109"
 
 
 class Request:
@@ -22,7 +21,10 @@ class Request:
 
 
 def enqueue(req):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=IP,port=port))
+    # credentials = pika.PlainCredentials('twan', 'root')
+    # connection = pika.BlockingConnection(pika.ConnectionParameters(host=IP,port=port,credentials=credentials))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=IP))
+
     channel = connection.channel()
 
     channel.exchange_declare(exchange='topic_logs',
