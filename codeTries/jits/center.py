@@ -2,8 +2,12 @@
 import pika
 import time
 import sys
+import threading
+from socketserver import ThreadedServer
 from car_request import Request
 
+serverIP = 'localhost'
+serverPort = 5555
 
 def request_from_string(message):
     print(message)
@@ -16,7 +20,14 @@ def find_car(rq):
     print("REQUEST = ")
     print("based on the message by " + rq.user_name + ", " + rq.no_passengers + " persons have to be transported from " +
           rq.location + " to " + rq.destination + ". Therefore car x is selected for the pickup")
+    print(server.askLocation())
 
+binding_key = input("Name of this center: ")
+    
+server = ThreadedServer(serverIP, serverPort)
+thrd = threading.Thread(target = server.start_server)
+thrd.setDaemon(True)
+thrd.start()
 
 if len(sys.argv) > 1:
     # example login
@@ -35,7 +46,6 @@ channel.exchange_declare(exchange='topic_logs', exchange_type='topic', durable=T
 result = channel.queue_declare(exclusive=True)
 queue_name = result.method.queue
 
-binding_key = input("Name of this center: ")
 channel.queue_bind(exchange='topic_logs',
                    queue=queue_name,
                    routing_key=binding_key)
