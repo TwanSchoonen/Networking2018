@@ -4,8 +4,8 @@ import sys
 import requests
 
 
-IP = "192.168.0.109"
-
+# IP = "145.97.184.144"
+# IP = "localhost"
 
 class Request:
     def __init__(self, username, location, center, no_passengers, destination):
@@ -20,21 +20,26 @@ class Request:
         return ", ".join([self.user_name, self.location, self.center, self.no_passengers, self.destination])
 
 
-def enqueue(req):
+def enqueue(req, IP):
     # credentials = pika.PlainCredentials('twan', 'root')
     # connection = pika.BlockingConnection(pika.ConnectionParameters(host=IP,port=port,credentials=credentials))
+
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=IP))
 
     channel = connection.channel()
 
     channel.exchange_declare(exchange='topic_logs',
-                             exchange_type='topic')
+                             exchange_type='topic',
+                             durable=True)
 
     routing_key = req.center
 
     channel.basic_publish(exchange='topic_logs',
                           routing_key=routing_key,
-                          body=req.to_string())
+                          body=req.to_string(),
+                          properties=pika.BasicProperties(
+                            delivery_mode=2,
+                          ))
 
     print(" [x] Sent %r%r" % (routing_key, req.to_string()))
     connection.close()
