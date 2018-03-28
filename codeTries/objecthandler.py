@@ -4,13 +4,14 @@ Junctions locations (both x and y coords) for adding clients location and destin
 '''
 
 import matplotlib.patches as patches
+import socketcar
 
 clients=[]
 cars=[]
 centers=[]
 blocksize=5
 
-class objecthandler:
+class objecthandler(object):
 	@staticmethod
 	def getBlock(x,y):
 		# Create a Rectangle patch
@@ -37,48 +38,29 @@ class objecthandler:
 		for i in range(0,len(clients)):
 			clientsLocations.append(clients[i][0])
 		return(clientsLocations)
-
-	@staticmethod
-	def makeCar(center):
-		pos=centers[center]
-		isAvailable=True
-		dest=pos
-		clientIndex=-1
-		newCar=[pos,isAvailable,dest,clientIndex]
+	
+	
+	def makeCar(self,center):
+		pos=(centers[center][0],centers[center][1])
+		newCar=socketcar.socketcar(pos)
 		cars.append(newCar)
 		
-
 	@staticmethod
 	def getCars():
 		carsLocations=[]
-		for i in range(0,len(cars)):
-			carsLocations.append(cars[i][0])
+		for car in cars:
+			carsLocations.append(car.pos)
 		return(carsLocations)
 		
 	@staticmethod
-	def changeLocation(pos,dest):
-		x=pos[0]
-		y=pos[1]
-		if x<dest[0]:
-			x+=1
-		elif x>dest[0]:
-			x-=1
-		elif y<dest[1]:
-			y+=1
-		elif y>dest[1]:
-			y-=1
-		pos=(x,y)
-		return(pos)
-		
-	@staticmethod
 	def findNearestCar(cars,indexes,client):
-		mindist=(cars[indexes[0]][0][0]-client[0])**2+(cars[indexes[0]][0][1]-client[1])**2
-		mincar=indexes[0]
-		for i in indexes[1:]:
-			tempdist = (cars[indexes[i]][0][0]-client[0])**2+(cars[indexes[i]][0][1]-client[1])**2
+		mindist=99999
+		for car in cars:
+			carpos = car.pos
+			tempdist = (carpos[0]-client[0])**2+(carpos[1]-client[1])**2
 			if(tempdist<mindist):
 				mindist=tempdist
-				mincar=indexes[i]
+				mincar=car
 		return(mincar)
 	
 	@staticmethod
@@ -91,9 +73,9 @@ class objecthandler:
 	@staticmethod
 	def findAvailableCars():
 		available=[]
-		for i in range(0,len(cars)):
-			if(cars[i][1]):
-				available.append(i)
+		for car in cars:
+			if(car.isAvailable):
+				available.append(car)
 		return(available)
 
 	@staticmethod
@@ -107,7 +89,7 @@ class objecthandler:
 			if(location[1]<50):
 				return(centers[1])
 		return(centers[3])
-
+	
 	@staticmethod
 	def updateObjects():
 		#TODO: handle cars to center connection
@@ -115,25 +97,26 @@ class objecthandler:
 		if(nextClient!=-1):
 			available=objecthandler.findAvailableCars()
 			if(available!=[]):
-				mincar = objecthandler.findNearestCar(cars,available,clients[nextClient][0])
-				cars[mincar][1]=False
+				mincar = objecthandler.findNearestCar(available,available,clients[nextClient][0])
+				socketcar.socketcar.setNewDest(mincar,False,nextClient,clients[nextClient][0],clients[nextClient][2])
 				clients[nextClient][3]=True
-				cars[mincar][3]=nextClient
-				cars[mincar][2]=clients[nextClient][0]
-		for i in range(0,len(cars)):
-			cars[i][0]=objecthandler.changeLocation(cars[i][0],cars[i][2])
-			if(not cars[i][1] and cars[i][0]==cars[i][2]):
-				if(cars[i][0]==clients[cars[i][3]][2]):
-					cars[i][1]=True
-					cars[i][2]=objecthandler.getNearestCenter(cars[i][0])
-					cars[i][3]=objecthandler.getNearestCenter(cars[i][0])
+		for car in cars:
+			socketcar.socketcar.changeLocation(car)
+			
+			if(not car.isAvailable and car.pos==car.dest):
+				if(car.pos==car.clientdest):
+					nearestCenter=objecthandler.getNearestCenter(car.pos)
+					socketcar.socketcar.setNewDest(car,True,-1,nearestCenter,nearestCenter)
 				else:
-					cars[i][2]=clients[cars[i][3]][2]
-					objecthandler.removeClient(cars[i][3])
+					car.dest=car.clientdest
+					objecthandler.removeClient(car.clientIndex)
+					
+		
 		return(objecthandler.getClients(),objecthandler.getCars())
 		
-	@staticmethod
-	def init():
+
+		
+	def init(self):
 		# Get centers location
 		centers.append([15,29])
 		centers.append([85,8])
@@ -141,13 +124,13 @@ class objecthandler:
 		centers.append([78,78])
 		
 		# Get clinets' location
-		objecthandler.makeClient((1,1),1,(10,100))
+		objecthandler.makeClient((1,1),1,(8,77))
 		objecthandler.makeClient((13,21),1,(20,20))
-		objecthandler.makeClient((25,20),1,(5,15))
+		objecthandler.makeClient((25,20),1,(7,15))
 		objecthandler.makeClient((41,41),1,(13,21))
 
 		# Get cars location
-		objecthandler.makeCar(0)
-		objecthandler.makeCar(1)
+		objecthandler().makeCar(0)
+		objecthandler().makeCar(1)
 		
 		
