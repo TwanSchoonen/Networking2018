@@ -1,14 +1,18 @@
 #!/usr/bin/python3           # This is client.py file
-
 import socket
+import sys
 
 # create a socket object
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
 # get local machine name
-host = socket.gethostname()                           
+# host = socket.gethostname()     
+host = 'localhost'
 
-port = 9999
+if len(sys.argv) != 1:
+    print("supply argument")
+    exit()
+port = int(sys.argv[1])
 
 # connection to hostname on the port.
 s.connect((host, port))                               
