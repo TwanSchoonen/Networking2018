@@ -1,3 +1,8 @@
+'''
+Object handler for contructing objects in the city and give updates on cars and clients locations
+Junctions locations (both x and y coords) for adding clients location and destination [7x-1:7x+1]
+'''
+
 import matplotlib.patches as patches
 
 clients=[]
@@ -17,9 +22,7 @@ class objecthandler:
 		return(centers)
 
 	@staticmethod
-	def makeClient(x0,y0,numberOfPassengers,x1,y1):
-		pos=(x0,y0)
-		dest=(x1,y1)
+	def makeClient(pos,numberOfPassengers,dest):
 		isPicked=False
 		newClient=[pos,numberOfPassengers,dest,isPicked]
 		clients.append(newClient)
@@ -36,8 +39,8 @@ class objecthandler:
 		return(clientsLocations)
 
 	@staticmethod
-	def makeCar(x,y):
-		pos=(x,y)
+	def makeCar(center):
+		pos=centers[center]
 		isAvailable=True
 		dest=pos
 		clientIndex=-1
@@ -92,26 +95,18 @@ class objecthandler:
 			if(cars[i][1]):
 				available.append(i)
 		return(available)
-		
-	'''
-if clients!=empty:
-	if available cars!=empty:
-		get list of available car
-		search nearest car(cars,[list of available cars],client location)
-		attach nearest car to client
-		make nearest car not available
-for all cars
-	if car hasn't pick up client:
-		send car to client
-		if car location=client location
-			car has client
-			attach car to destination
-			dequeue client
-		else
-			send car to destination
-			if car location=destination
-				make car available
-	'''
+
+	@staticmethod
+	def getNearestCenter(location):
+		if(location[0]<50):
+			if(location[1]<50):
+				return(centers[0])
+			else:
+				return(centers[2])
+		else:
+			if(location[1]<50):
+				return(centers[1])
+		return(centers[3])
 
 	@staticmethod
 	def updateObjects():
@@ -130,6 +125,8 @@ for all cars
 			if(not cars[i][1] and cars[i][0]==cars[i][2]):
 				if(cars[i][0]==clients[cars[i][3]][2]):
 					cars[i][1]=True
+					cars[i][2]=objecthandler.getNearestCenter(cars[i][0])
+					cars[i][3]=objecthandler.getNearestCenter(cars[i][0])
 				else:
 					cars[i][2]=clients[cars[i][3]][2]
 					objecthandler.removeClient(cars[i][3])
@@ -144,13 +141,13 @@ for all cars
 		centers.append([78,78])
 		
 		# Get clinets' location
-		objecthandler.makeClient(62,2,1,3,3)
-		objecthandler.makeClient(13,21,1,20,20)
-		objecthandler.makeClient(25,20,1,5,15)
-		objecthandler.makeClient(41,41,1,13,21)
+		objecthandler.makeClient((1,1),1,(10,100))
+		objecthandler.makeClient((13,21),1,(20,20))
+		objecthandler.makeClient((25,20),1,(5,15))
+		objecthandler.makeClient((41,41),1,(13,21))
 
 		# Get cars location
-		objecthandler.makeCar(centers[0][0],centers[0][1])
-		objecthandler.makeCar(centers[1][0],centers[1][1])
+		objecthandler.makeCar(0)
+		objecthandler.makeCar(1)
 		
 		

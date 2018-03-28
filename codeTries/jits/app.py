@@ -7,7 +7,12 @@ from flask import jsonify
 import sys
 
 
-url = "http://192.168.0.109:5000/data"
+# url = "http://145.97.184.144:5000/data" #default url
+
+url = "http://127.0.0.1:5000/data"  # default REST url
+default_rabbit_url = "localhost"
+
+
 headers = {'content-type': 'application/json'}
 
 
@@ -45,7 +50,20 @@ def find_nearest_center(lctn):
     return lctn
 
 
+def choose_ip():
+    rabbit_ip = default_rabbit_url
+    answer = input("Do you want to connect to " + rabbit_ip + "? (y/n): ")
+    while not (answer == "y" or answer == "n"):
+        answer = input("Invalid response, do you want to connect to " + rabbit_ip + "? (y/n): ")
+    if answer == "y":
+        return rabbit_ip
+    elif answer == "n":
+        rabbit_ip = input("Give the IP you want to connect to: ")
+        return rabbit_ip
+
+
 def new_request(user):
+
     print("Creating a new request...")
     location = input("Location: ")
     no_passengers = input("Number of passengers: ")
@@ -55,7 +73,9 @@ def new_request(user):
     destination = input("Destination: ")
     
     req = Request(user.user_name, location, find_nearest_center(location), no_passengers, destination)
-    enqueue(req)
+
+    rabbit_ip = choose_ip()
+    enqueue(req, rabbit_ip) #TODO give IP as arg
 
     print("New request: " + req.to_string())
 
@@ -76,19 +96,8 @@ def create_new_user(nm):
     return jsonify({'user': new_user}), 201
 
 
-
 def track_ride():
     print("Tracking ride...")
-
-
-def exists(nm):
-    print("Checking if user exists...")
-    req = requests.get(IP + nm)#.json()
-    if 'user' in req:
-        print("User " + nm + " exists")
-        return True
-    print("User " + nm + " does not yet exist")
-    return False
 
 
 def show_map():
@@ -145,8 +154,10 @@ def register_new_user():
     print(json.dumps(data))
 
     res = requests.post(url, data=json.dumps(data), headers=headers)
+    print(res)
 
     return make_user(res.json())
+
 
 def log_in():
     auth = (input("Username: "), input("Password: "))
@@ -171,24 +182,35 @@ def show_admin_options():
     print("admin options")
 
 
+def new_server_ip():
+    global url
+    new_url = input("Give the new ip that should be used for the server: ")
+    url = new_url
+
+
 def main(argv):
     while True:
         if len(argv) == 2 and argv[1] == "admin":
             show_admin_options()
             break
 
-        opts = ["register a new user", "log in", "exit"]
-        opt = option_menu(opts, 1, 3)
+        opts = ["register a new user", "log in", "change server ip", "exit"]
+        opt = option_menu(opts, 1, 4)
         if opt == 1:
             current_user = register_new_user()
         elif opt == 2:
             current_user = log_in()
         elif opt == 3:
+            new_server_ip()
+            # go through this menu again
+            continue
+        elif opt == 4:
             print("Bye bye...")
             break
 
         log_out = False
         while True:
+            print("\nCurrently logged in as " + current_user.user_name)
             opts = ["request a new ride", "track your ride", "see the map", "see/change your account details", "log out"]
             opt = option_menu(opts, 1, 5)
             if opt == 1:
@@ -201,7 +223,6 @@ def main(argv):
                 log_out = user_details(current_user)
             elif opt == 5:
                 log_out = True
-
             if log_out:
                 print("Logging out...")
                 break

@@ -2,43 +2,25 @@
 import pika
 import time
 import sys
-import socket
 from car_request import Request
 
 
-
-
-s.close()
-print (msg.decode('ascii'))
 def request_from_string(message):
     print(message)
     msg = message.split(', ')
     req = Request(msg[0], msg[1], msg[2], msg[3], msg[4])
     return req
 
+
 def find_car(rq):
     print("REQUEST = ")
     print("based on the message by " + rq.user_name + ", " + rq.no_passengers + " persons have to be transported from " +
           rq.location + " to " + rq.destination + ". Therefore car x is selected for the pickup")
 
-    # create a socket object
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-
-    # get local machine name
-    host = socket.gethostname()                           
-
-    port = 9999
-
-    # connection to hostname on the port.
-    s.connect((host, port))                               
-
-    # Receive no more than 1024 bytes
-    msg = s.recv(1024)                                     
-    
 
 if len(sys.argv) > 1:
     # example login
-    credentials = pika.PlainCredentials('guest','guest')
+    credentials = pika.PlainCredentials('guest', 'guest')
     # first argument is a string
     print("seting up connection to: " + str(sys.argv[1]))
     connection = pika.BlockingConnection(pika.ConnectionParameters(str(sys.argv[1]), credentials=credentials))
@@ -48,7 +30,7 @@ else:
     
 channel = connection.channel()
 
-channel.exchange_declare(exchange='topic_logs', exchange_type='topic')
+channel.exchange_declare(exchange='topic_logs', exchange_type='topic', durable=True)
 
 result = channel.queue_declare(exclusive=True)
 queue_name = result.method.queue
