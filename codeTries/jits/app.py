@@ -74,7 +74,7 @@ def new_request(user):
         no_passengers = input("Number of passengers: ")
     destination = input("Destination: ")
     
-    req = Request(local_user.user_name, location, find_nearest_center(location), no_passengers, destination)
+    req = Request(user.user_name, location, find_nearest_center(location), no_passengers, destination)
 
     rabbit_ip = choose_ip()
     enqueue(req, rabbit_ip) #TODO give IP as arg
