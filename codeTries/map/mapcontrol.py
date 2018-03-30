@@ -1,7 +1,6 @@
 import pygame
 
 from mapserver import MapServer
-# from mapmodel import MapModel
 
 class MapControl(object):
 
@@ -15,7 +14,8 @@ class MapControl(object):
 
 	def serverEvent(self, data):
 		print(data)
-		self.model.addCenter(data.decode("utf-8"))
+		stringData = data.decode('utf-8').split(', ')
+		self.model.addCenter(stringData)
 		
 	def checkEvents(self):
 		for event in pygame.event.get():

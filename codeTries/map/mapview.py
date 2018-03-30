@@ -1,16 +1,17 @@
 import pygame
+import constants
 
 from mapmodel import MapModel
 
 class MapView(object):
 
 	FONTSIZE = 20
-	BACKGROUNDCOLOR = MapModel.white
+	BACKGROUNDCOLOR = constants.white
 	
 	def __init__(self, model):
 		self.model = model
-		self.screen = pygame.display.set_mode((MapModel.MAPWIDTH,
-											   MapModel.MAPHEIGHT))
+		self.screen = pygame.display.set_mode((constants.MAPWIDTH,
+											   constants.MAPHEIGHT))
 		self.font = pygame.font.SysFont('fontawesome5free',
 										MapView.FONTSIZE)
 
@@ -27,10 +28,10 @@ class MapView(object):
 		
 	def drawMain(self):
 		for idx in range(len(self.model.centers)):
-			color = MapModel.CENTERPROPS[idx][0]
-			pos = MapModel.CENTERPROPS[idx][1]
+			color = constants.CENTERPROPS[idx][0]
+			pos = constants.CENTERPROPS[idx][1]
 			pygame.draw.circle(self.screen, color, pos,
-							   MapModel.CENTERRADIUS)
+							   constants.CENTERRADIUS)
 		# 	self.screen.blit(
 		# 		self.font.render(
 		# 			self.centers[idx], True, black
@@ -38,13 +39,18 @@ class MapView(object):
 		# pygame.draw.circle(self.screen, self.c2_color, self.c2_pos, 50)
 		
 	def drawCenter(self):
-		y_pos = MapModel.RECTDIST
-		while y_pos < MapModel.MAPHEIGHT:
-			x_pos = MapModel.RECTDIST
-			while x_pos < MapModel.MAPWIDTH:
-				pygame.draw.rect(self.screen, MapModel.blue,
-								 (x_pos, y_pos, MapModel.RECTSIZE,
-								  MapModel.RECTSIZE))
-				x_pos += MapModel.RECTSIZE + MapModel.RECTDIST
-			y_pos += MapModel.RECTSIZE + MapModel.RECTDIST
+		y_pos = constants.RECTDIST
+		while y_pos < constants.MAPHEIGHT:
+			x_pos = constants.RECTDIST
+			while x_pos < constants.MAPWIDTH:
+				pygame.draw.rect(self.screen, constants.blue,
+								 (x_pos, y_pos, constants.RECTSIZE,
+								  constants.RECTSIZE))
+				x_pos += constants.RECTSIZE + constants.RECTDIST
+			y_pos += constants.RECTSIZE + constants.RECTDIST
 
+		cars = self.model.cars[self.model.center]
+
+		for car in cars:
+			pygame.draw.circle(self.screen, constants.black, car.getMapPos(),
+							   int(constants.RECTDIST / 2))

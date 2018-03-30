@@ -4,16 +4,19 @@ import time
 import uuid
 import sys
 import threading
-from centerserver import ThreadedServer
+from centerserver import CenterServer
 from centerclient import MapSocketClient
 from car_request import Request
 
 class Center:
 
-	def __init__(self, name, messageIP, socketIP, socketPort):
+	def __init__(self, name, messageIP, serverAddr, serverPort, amountOfCars):
 
 		self.name = name
-		
+		self.serverAddr = serverAddr
+		self.serverPort = serverPort
+		self.amountOfCars = amountOfCars
+		self.server = CenterServer(serverAddr, serverPort)
 		# example login
 		self.credentials = pika.PlainCredentials('guest', 'guest')
 
@@ -49,7 +52,7 @@ class Center:
 		print("REQUEST = ")
 		print("based on the message by " + req.user_name + ", " + req.no_passengers + " persons have to be transported from " +
 			  req.location + " to " + req.destination + ". Therefore car x is selected for the pickup")
-		# print(server.askLocation())
+		print(self.server.askLocation())
 
 	def callback(self, ch, method, props, body):
 		print(" [x] Received %r%r" % (method.routing_key, body))
@@ -58,26 +61,30 @@ class Center:
 		time.sleep(5 + body.count(b'.'))
 		print(" [x] Done")
 
-	def start_server(self): 
-		server = ThreadedServer(serverIP, serverPort)
-		thrd = threading.Thread(target = server.start_server)
+	def startServerThread(self): 
+		thrd = threading.Thread(target = self.server.start_server)
 		thrd.setDaemon(True)
 		thrd.start()
 
 	def call(self):
-		MapSocketClient('localhost', 1234).send_message(self.name)
+		MapSocketClient('localhost', 1234).send_message(self.name + ', ' +
+														str(self.amountOfCars) + ', ' +
+														self.serverAddr + ', ' +
+														str(self.serverPort))
+		self.startServerThread()
 		self.channel.start_consuming()
 
 
 def main(argv):
 	name = input("Name of this center: ")
+	amountOfCars = int(input("How many cars do i have?"))
 	messageIP = 'localhost'
 	if len(sys.argv) > 1:
 		messageIP = str(argv[1])
 		print("seting up connection to: " + str(argv[1]))
 	else:
 		print("connect to localhost, to connect to url add an argument")
-	Center(name, messageIP, 'localhost', 5555).call()
+	Center(name, messageIP, 'localhost', 5555, amountOfCars).call()
   
 if __name__== "__main__":
 	main(sys.argv)

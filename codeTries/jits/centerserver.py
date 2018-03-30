@@ -2,7 +2,7 @@
 import socket
 import threading
 
-class ThreadedServer(object):
+class CenterServer(object):
     def __init__(self, host, port):
         self.client_list = set()
         self.client_lock = threading.Lock()
@@ -64,7 +64,7 @@ class ThreadedServer(object):
                     client.close()
                     return False
 
-if __name__ == "__main__":
-	port = int(input("port?"))
-	ThreadedServer('0.0.0.0', port).start_server()
+# if __name__ == "__main__":
+# 	port = int(input("port?"))
+# 	ThreadedServer('0.0.0.0', port).start_server()
 
