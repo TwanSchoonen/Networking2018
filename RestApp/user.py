@@ -7,7 +7,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(32), index=True)
+    username = db.Column(db.String(32), index=True)
     first_name = db.Column(db.String(32))
     last_name = db.Column(db.String(32))
     birth_date = db.Column(db.String(10))
@@ -28,7 +28,7 @@ class User(db.Model):
         return s.dumps({'id': self.id})
 
     def __repr__(self):
-        return '<User %r>' % self.user_name
+        return '<User %r>' % self.username
 
     
     # @staticmethod

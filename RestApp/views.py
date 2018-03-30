@@ -24,7 +24,7 @@ def home_user_amount():
 
 @people.route('/data', methods = ['POST'])
 def new_user():
-    user_name = request.json.get('username')
+    username = request.json.get('username')
     first_name = request.json.get('firstname')
     last_name = request.json.get('lastname')
     birth_date = request.json.get('birthdate')
@@ -34,11 +34,11 @@ def new_user():
     balance = request.json.get('balance')
     password = request.json.get('password')
     
-    if user_name is None or password is None or first_name is None or last_name is None or birth_date is None or street_name is None or house_number is None or city is None or balance is None:
+    if username is None or password is None or first_name is None or last_name is None or birth_date is None or street_name is None or house_number is None or city is None or balance is None:
         abort(400) # missing arguments
-    if User.query.filter_by(user_name = user_name).first() is not None:
+    if User.query.filter_by(username = username).first() is not None:
         abort(400) # existing user
-    user = User(user_name = user_name)
+    user = User(username = username)
     user.first_name = first_name
     user.last_name = last_name
     user.birth_date = birth_date
@@ -49,14 +49,14 @@ def new_user():
     user.hash_password(password)
     db.session.add(user)
     db.session.commit()
-    return jsonify({'username': user.user_name, 'firstname': user.first_name, 'lastname': user.last_name,
+    return jsonify({'username': user.username, 'firstname': user.first_name, 'lastname': user.last_name,
                     'birthdate': user.birth_date, 'streetname': user.street_name, 'housenumber': user.house_number,
                     'city': user.city, 'balance': user.balance}), 201
 
 @people.route('/data', methods=['GET'])
 @auth.login_required
 def get_user():
-    return jsonify({'username': g.user.user_name, 'firstname': g.user.first_name, 'lastname': g.user.last_name,
+    return jsonify({'username': g.user.username, 'firstname': g.user.first_name, 'lastname': g.user.last_name,
                     'birthdate': g.user.birth_date, 'streetname': g.user.street_name, 'housenumber': g.user.house_number,
                     'city': g.user.city, 'balance': g.user.balance})
 
@@ -69,7 +69,7 @@ def get_all_users():
 @people.route('/data', methods=['DELETE'])
 @auth.login_required
 def delete_user():
-    user = User.query.filter_by(user_name=g.user.user_name).first()
+    user = User.query.filter_by(username=g.user.username).first()
     db.session.delete(user)
     db.session.commit()
     return jsonify({'result': True}), 201
@@ -86,15 +86,15 @@ def delete_all_users():
 @people.route('/data', methods=['PUT'])
 @auth.login_required
 def put_user():
-    user = User.query.filter_by(user_name=g.user.user_name).first()
+    user = User.query.filter_by(username=g.user.username).first()
     if not request.json:
         abort(400)
     # if 'username' in request.json and type(request.json['username']) != unicode:
     #     abort(400)
     
-    user.user_name = request.json.get('username')
+    user.username = request.json.get('username')
     user.hash_password(request.json.get('password'))
 
     db.session.commit()
-    return jsonify({'user' : user.user_name}), 201
+    return jsonify({'user' : user.username}), 201
 

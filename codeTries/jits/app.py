@@ -208,7 +208,7 @@ def log_in():
         print("bad request")
         auth = (input("Username: "), input("Password: "))
         res = requests.get(url, auth=auth, headers=headers)
-    print(res.status_code)
+    print("status code: " + str(res.status_code))
     return local_user.User(res.json())
 
 
