@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-from car_request import Request, enqueue
-import user
+from car_request import Request
+from enqueue import enqueue
+import local_user
 import requests
 import json
 from flask import jsonify
@@ -38,12 +39,13 @@ def option_menu(options, low, high):
         print("- To " + opt + ", press " + str(cnt))
         cnt += 1
 
-    decision = int(input("Option: "))
+    decision = input("Option: ")
     while illegal_option(decision, low, high):
-        print("Illegal option '" + str(decision) + "'. Please ty again")
-        decision = int(input("Option: "))
+        print("Illegal option '" + str(decision) + "'. Please try again")
 
-    return decision
+        decision = input("Option: ")
+
+    return int(decision)
 
 
 def find_nearest_center(lctn):
@@ -72,12 +74,12 @@ def new_request(user):
         no_passengers = input("Number of passengers: ")
     destination = input("Destination: ")
     
-    req = Request(user.user_name, location, find_nearest_center(location), no_passengers, destination)
+    req = Request(local_user.user_name, location, find_nearest_center(location), no_passengers, destination)
 
     rabbit_ip = choose_ip()
     enqueue(req, rabbit_ip) #TODO give IP as arg
 
-    print("New request: " + req.to_string())
+    print("New request sent: " + req.to_string())
 
 
 def create_new_user(nm):
@@ -119,11 +121,46 @@ def delete_account(current_user):
     return False
 
 
+def change_details(current_user):
+    opts = ["change password", "change your username", "change your first name", "change your last name",
+            "change your date of birth", "change your street name", "change your house number", "change your city"]
+    opt = option_menu(opts, 1, 8)
+    pw = input("You want to change your details, please reenter your password: ")
+    auth = (current_user.user_name, pw)
+
+    if opt == 1:
+        new_pw = input("Please enter your new password: ")
+        data = current_user.get_json(new_pw)
+    elif opt == 2:
+        current_user.user_name = input("Please enter your new username: ")
+        data = current_user.get_json(pw)
+    elif opt == 3:
+        current_user.first_name = input("Please enter your new first name: ")
+        data = current_user.get_json(pw)
+    elif opt == 4:
+        current_user.last_name = input("Please enter your new last name: ")
+        data = current_user.get_json(pw)
+    elif opt == 5:
+        current_user.birthdate = input("Please enter your new date of birth: ")
+        data = current_user.get_json(pw)
+    elif opt == 6:
+        current_user.street_name = input("Please enter your new street name: ")
+        data = current_user.get_json(pw)
+    elif opt == 7:
+        current_user.house_number = input("Please enter your new house number: ")
+        data = current_user.get_json(pw)
+    elif opt == 8:
+        current_user.city = input("Please enter your new city of residence: ")
+        data = current_user.get_json(pw)
+
+    requests.put(url, data=json.dumps(data), auth=auth, headers=headers)
+
+
 def user_details(current_user):
-    opts = ["change password/username", "delete account", "go back"]
+    opts = ["change details", "delete account", "go back"]
     opt = option_menu(opts, 1, 3)
     if opt == 1:
-        pass
+        change_details(current_user)
     elif opt == 2:
         if delete_account(current_user):
             return True
@@ -132,54 +169,69 @@ def user_details(current_user):
     return False
 
 
-def make_user(res_json):
-    print("make user:")
-    print(res_json)
-    usr = res_json["username"]
-    return user.User(usr)
+def receive_input(field_name):
+    field = input(field_name + ": ")
+    while field == "":
+        field = input(field_name + ": ")
+    return field
+
+
+def get_user_info():
+    user_name = receive_input("Username")
+    password = receive_input("Password")
+    first_name = receive_input("First name")
+    last_name = receive_input("Last name")
+    birth_date = receive_input("Date of birth")
+    street_name = receive_input("Street name")
+    house_number = receive_input("House number")
+    city = receive_input("City of residence")
+
+    data = {"username": user_name, "password": password, "firstname": first_name, "lastname": last_name,
+            "birthdate": birth_date, "streetname": street_name, "housenumber": house_number, "city": city, "balance": 0.0}
+
+    return requests.post(url, data=json.dumps(data), headers=headers)
 
 
 def register_new_user():
-    username = input("Username: ")
-    while username == "":
-        username = input("Username: ")
+    res = get_user_info()
+    while res.status_code == 500:
+        print("Error in creating user, try again")
+        res = get_user_info()
 
-    password = input("Password: ")
-    while password == "":
-        password = input("Password: ")
-
-    data = {"username": username, "password": password}
-
-    print("data = " )
-    print(json.dumps(data))
-
-    res = requests.post(url, data=json.dumps(data), headers=headers)
-    print(res)
-
-    return make_user(res.json())
+    return local_user.User(res.json())
 
 
 def log_in():
     auth = (input("Username: "), input("Password: "))
-    res = requests.get(url, auth=auth)
+    res = requests.get(url, auth=auth, headers = headers)
     while res.status_code == 401:
         print("bad request")
         auth = (input("Username: "), input("Password: "))
         res = requests.get(url, auth=auth, headers=headers)
-        
-    print(res.json())
-    return make_user(res.json())
+    print(res.status_code)
+    return local_user.User(res.json())
 
 
 def show_database():
     auth = ("root", "root")
-
     res = requests.get(url + "all", auth=auth, headers=headers)
     print(res.json())
 
 
+def delete_database():
+    auth = ("root", "root")
+    res = requests.delete(url + "all", auth=auth, headers=headers)
+    print(res.status_code)
+    print(res.json())
+
+
 def show_admin_options():
-    print("admin options")
+    opts = ["show the database", "delete the database"]
+    opt = option_menu(opts, 1, 2)
+    if opt == 1:
+        show_database()
+    elif opt == 2:
+        delete_database()
 
 
 def new_server_ip():

@@ -8,6 +8,7 @@ from centerserver import ThreadedServer
 from centerclient import MapSocketClient
 from car_request import Request
 
+
 class Center:
 
 	def __init__(self, name, messageIP, socketIP, socketPort):
@@ -32,12 +33,14 @@ class Center:
 
 		
 		self.channel.queue_bind(exchange='topic_logs',
-		 				   queue=self.queue_name,
-		 				   routing_key=self.name)
+						   queue=self.queue_name,
+						   routing_key=self.name)
+
 
 		self.channel.basic_consume(self.callback,
 								   queue=self.queue_name,
 								   no_ack=True)
+
 	
 	def request_from_string(self, message):
 		print(message)
@@ -58,6 +61,8 @@ class Center:
 		time.sleep(5 + body.count(b'.'))
 		print(" [x] Done")
 
+
+
 	def start_server(self): 
 		server = ThreadedServer(serverIP, serverPort)
 		thrd = threading.Thread(target = server.start_server)
@@ -65,7 +70,7 @@ class Center:
 		thrd.start()
 
 	def call(self):
-		MapSocketClient('localhost', 1234).send_message(self.name)
+		MapSocketClient('localhost', 50000).send_message(self.name)
 		self.channel.start_consuming()
 
 
