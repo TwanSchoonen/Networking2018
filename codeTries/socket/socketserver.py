@@ -64,6 +64,6 @@ class ThreadedServer(object):
                     client.close()
                     return False
 
-# if __name__ == "__main__":
-#     ThreadedServer('localhost', 5555).start_server()
+if __name__ == "__main__":
+    ThreadedServer('localhost', 5555).start_server()
 

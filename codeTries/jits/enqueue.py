@@ -13,7 +13,7 @@ def enqueue(req, IP):
     channel.exchange_declare(exchange='topic_logs',
                              exchange_type='topic',
                              durable=True)
-    routing_key = req.center
+    routing_key = req.centerLocation
 
     channel.basic_publish(exchange='topic_logs',
                           routing_key=routing_key,

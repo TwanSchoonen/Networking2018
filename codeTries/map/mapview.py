@@ -52,5 +52,20 @@ class MapView(object):
 		cars = self.model.cars[self.model.center]
 
 		for car in cars:
-			pygame.draw.circle(self.screen, constants.black, car.getMapPos(),
+			pygame.draw.circle(self.screen, constants.black,
+							   MapView.getMapPos(car.pos[0] + car.distance[0],
+												 car.pos[1] + car.distance[1]),
 							   int(constants.RECTDIST / 2))
+
+		clients = self.model.clients[self.model.center]
+
+		for client in clients:
+			pygame.draw.circle(self.screen, constants.red,
+							   MapView.getMapPos(client[0], client[1]),
+							   int(constants.RECTDIST / 2))
+	@staticmethod		
+	def getMapPos(x, y):
+		return (int(x * (constants.RECTSIZE + constants.RECTDIST) +
+					constants.RECTDIST * 0.5),
+				int(y * (constants.RECTSIZE + constants.RECTDIST) +
+					constants.RECTDIST * 0.5))

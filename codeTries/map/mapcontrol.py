@@ -13,9 +13,14 @@ class MapControl(object):
 		MapServer('0.0.0.0', 1234, self).start_server()
 
 	def serverEvent(self, data):
-		print(data)
-		stringData = data.decode('utf-8').split(', ')
-		self.model.addCenter(stringData)
+		stringData = data.decode("utf-8")
+		id = stringData.split("=")
+		# new center
+		if id[0] == "center":
+			self.model.addCenter(id[1].split(", "))
+		# new client
+		if id[0] == "client":
+			self.model.addClient(id[1].split(","))
 		
 	def checkEvents(self):
 		for event in pygame.event.get():

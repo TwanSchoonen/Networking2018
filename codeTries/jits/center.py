@@ -17,6 +17,8 @@ class Center:
 		self.serverPort = serverPort
 		self.amountOfCars = amountOfCars
 		self.server = CenterServer(serverAddr, serverPort)
+		self.mapClient = MapSocketClient('localhost', 1234)
+		# rabbitMQ
 		# example login
 		self.credentials = pika.PlainCredentials('guest', 'guest')
 
@@ -49,29 +51,65 @@ class Center:
 		return req
 
 	def find_car(self, req):
-		print("REQUEST = ")
-		print("based on the message by " + req.user_name + ", " + req.no_passengers + " persons have to be transported from " +
-			  req.location + " to " + req.destination + ". Therefore car x is selected for the pickup")
-		print(self.server.askLocation())
+		# reset the previous send locations
+		self.server.locations = []
+		# ask to send the new locations
+		self.server.broadcast("Location?")
+
+		# wait for all cars to respond
+		while len(self.server.locations) != len(self.server.client_list):
+			time.sleep(0.1)
+		
+		self.findClosestCar(req.clientLocation.split(','), req.destination.split(','))
+
+	
+	@staticmethod
+	def getDistance(x1, y1, x2, y2):
+		return abs(int(x1) - int(x2)) + abs(int(y1) - int(y2))
+		
+
+	def findClosestCar(self, clientLocation, clientDestination):
+		if not self.server.locations:
+			print("no available cars...")
+			return
+		minDistance = Center.getDistance(clientLocation[0], clientLocation[1],
+										 self.server.locations[0][0], self.server.locations[0][1])
+		minClient = self.server.locations[0][2]
+ 
+		for location in self.server.locations[1:]:
+			carDistance = Center.getDistance(clientLocation[0], clientLocation[1],
+											 location[0], location[1]) 
+			if carDistance < minDistance:
+				minDistance = carDistance
+				minClient = location[2]
+
+		self.server.sendToClient("goto=" + clientLocation[0] + ',' + clientLocation[1] +
+								 ", dest=" + clientDestination[0] + ',' + clientDestination[1],
+								 minClient)
+
+		
+		# print("REQUEST = ")
+		# print("based on the message by " + req.user_name + ", " + req.no_passengers + " persons have to be transported from " +
+		# 	  req.location + " to " + req.destination + ". Therefore car x is selected for the pickup")
 
 	def callback(self, ch, method, props, body):
 		print(" [x] Received %r%r" % (method.routing_key, body))
+
 		req = self.request_from_string(body.decode("utf-8"))
+		self.mapClient.send_message("client=" + req.clientLocation + ',' + self.name)
 		self.find_car(req)
-		time.sleep(5 + body.count(b'.'))
 		print(" [x] Done")
 
-	def startServerThread(self): 
-		thrd = threading.Thread(target = self.server.start_server)
-		thrd.setDaemon(True)
-		thrd.start()
 
 	def call(self):
-		MapSocketClient('localhost', 1234).send_message(self.name + ', ' +
-														str(self.amountOfCars) + ', ' +
-														self.serverAddr + ', ' +
-														str(self.serverPort))
-		self.startServerThread()
+		# start the server, talking to the cars
+		self.server.start()
+		# inform the map of the centers existance
+		self.mapClient.send_message("center=" + self.name + ', ' +
+									str(self.amountOfCars) + ', ' +
+									self.serverAddr + ', ' +
+									str(self.serverPort))
+		# consume the message queue is blocking
 		self.channel.start_consuming()
 
 

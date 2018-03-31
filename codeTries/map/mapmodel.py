@@ -11,6 +11,7 @@ class MapModel(object):
 		self.center = -1
 		self.centers = []
 		self.cars = []
+		self.clients = []
 
 	def update(self):
 		if self.center != -1:
@@ -23,10 +24,19 @@ class MapModel(object):
 		print(centerData)
 		print("adding: %s" % centerData[0])
 		self.centers.append(centerData[0])
+		self.clients.append([])
 		list = []
 		for idx in range(int(centerData[1])):
 			list.append(Car(centerData[2], int(centerData[3])))
 		self.cars.append(list)
+		
+	def addClient(self, clientData):
+		for idx in range(len(self.centers)):
+			if self.centers[idx] == clientData[2]:
+				self.clients[idx].append((int(clientData[0]), int(clientData[1])))
+				break
+		print(self.clients)
+
 		
 		
 	def inACenter(self, click):

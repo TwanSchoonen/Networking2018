@@ -2,69 +2,68 @@
 import socket
 import threading
 
+BUFFSIZE = 1024
+
 class CenterServer(object):
-    def __init__(self, host, port):
-        self.client_list = set()
-        self.client_lock = threading.Lock()
-        self.host = host
-        self.port = port
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.bind((self.host, self.port))
-        
-    def start_server(self):
-        print("starting server on %s:%s" % (self.host, self.port))
-        self.sock.listen(5)
-        while True:
-            client, address = self.sock.accept()
-            # client.settimeout(60)
-            print("[New connection from %s:%s]:" % (address[0],address[1]))
-            with self.client_lock:
-                self.client_list.add(client)
-            thrd = threading.Thread(target = self.listenToClient,args = (client,address))
-            # makes sure the thread stops when main stops
-            thrd.setDaemon(True)
-            thrd.start()
+	def __init__(self, host, port):
+		self.host = host
+		self.port = port
+		# list with clients and a used lock
+		self.client_list = set()
+		self.client_lock = threading.Lock()
+		self.locations = []
 
-    def askLocation(self):
-        locations = []
-        print("asking location")
-        with self.client_lock:
-            for c in self.client_list:
-                c.send(str.encode("Location?"))
-                location = c.recv(1024)
-                locations.append(location.decode("utf-8"))
-                # if not data:
-        return locations
+	def start(self):
+		listener = threading.Thread(target = self.listener)
+		listener.setDaemon(True)
+		listener.start()
+		
+	def listener(self):
+		print("starting server on %s:%s" % (self.host, self.port))
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		sock.bind((self.host, self.port))
+		sock.listen(5)
 
-    def listenToClient(self, client, address):
-        size = 1024
-        while True:
-            try:
-                data = client.recv(size)
-                if data:
-                    # Set the response to echo back the recieved data 
-                    print("got from client: %s\n" % data)
-                    response = data
-                    if data == str.encode("allloc"):
-                        with self.client_lock:
-                            for c in self.client_list:
-                                print("sending: %s as broadcast\n" % data)
-                                c.send(data)
-                    else:
-                        print("sending: %s as response\n" % data)
-                        client.send(response)
-                else:
-                    raise error('Client disconnected')
-            except:
-                # connection clean up
-                with self.client_lock:
-                    print("remove client")
-                    self.client_list.remove(client)
-                    client.close()
-                    return False
+		while True:
+			client, address = sock.accept()
+			print("[New connection from %s:%s]:" % (address[0],address[1]))
 
-# if __name__ == "__main__":
-# 	port = int(input("port?"))
-# 	ThreadedServer('0.0.0.0', port).start_server()
+			with self.client_lock:
+				self.client_list.add(client)
 
+			clientThread = threading.Thread(target=self.listenToClient,
+											args=(client,))
+			clientThread.setDaemon(True)
+			clientThread.start()
+
+
+	def broadcast(self, message):
+		for c in self.client_list:
+			c.send(message.encode("utf-8"))
+
+	def sendToClient(self, message, client):
+		client.send(message.encode("utf-8"))
+
+	def listenToClient(self, client):
+		try:
+			while True:
+				data = client.recv(BUFFSIZE)
+				if not data:
+					break
+				message = data.decode("utf-8")
+				if (message.startswith("Location=")):
+					loc = message.split("=")[1]
+					coord = loc.split(", ")
+					self.locations.append((int(coord[0]), int(coord[1]), client))
+					print("got location:" + message)
+				else:
+					print("got from client: %s\n" % data)
+		except Exception as e:
+			print(e)
+		finally:
+			# connection clean up
+			with self.client_lock:
+				print("remove client")
+				self.client_list.remove(client)
+				client.close()
+				return False

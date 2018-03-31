@@ -18,7 +18,7 @@ class Car(object):
 		
 		self.isAvailable = True
 		#the place
-		self.pos = [8, 1]
+		self.pos = [randint(0,8), randint(0,6)]
 		# between 0 and 1
 		self.distance = [0, 0]
 		
@@ -72,10 +72,10 @@ class Car(object):
 		if self.pos[1] == 0:
 			self.chooseMovementIn([Car.EAST, Car.SOUTH, Car.WEST])
 		# right
-		elif (self.getMapPos()[0] + constants.RECTDIST >= constants.MAPWIDTH):
+		elif (self.pos[0] == 8):
 			self.chooseMovementIn([Car.NORTH, Car.SOUTH, Car.WEST])
-		# bottom
-		elif (self.getMapPos()[1] + constants.RECTDIST >= constants.MAPHEIGHT):
+		# # bottom
+		elif (self.pos[1] == 6):
 			self.chooseMovementIn([Car.NORTH, Car.EAST, Car.WEST])
 		# left
 		elif self.pos[0] == 0:
@@ -91,15 +91,8 @@ class Car(object):
 		choice = randint(0, len(list) - 1)
 		self.movement = list[choice]
 	
-	# Gives the car position in map coordiantes
-	def getMapPos(self):
-		return (int((self.pos[0] + self.distance[0]) *
-					(constants.RECTSIZE + constants.RECTDIST) +
-					constants.RECTDIST * 0.5),
-				int((self.pos[1] + self.distance[1]) *
-					(constants.RECTSIZE + constants.RECTDIST) +
-					constants.RECTDIST * 0.5))
 				
+
 	def changeLocation(self):
 		if(self.pos!=self.dest):
 			x=self.pos[0]

@@ -67,14 +67,15 @@ def choose_ip():
 def new_request(user):
 
     print("Creating a new request...")
-    location = input("Location: ")
+    centerLocation = input("Center location: ")
+    clientLocation = input("client location 'x,y': ")
     no_passengers = input("Number of passengers: ")
     while illegal_option(no_passengers, 1, 3):
         print("Number of passengers (" + no_passengers + ") illegal. Please enter a number between 1 and 3.")
         no_passengers = input("Number of passengers: ")
     destination = input("Destination: ")
     
-    req = Request(user.user_name, location, find_nearest_center(location), no_passengers, destination)
+    req = Request(user.user_name, centerLocation, clientLocation, no_passengers, destination)
 
     rabbit_ip = choose_ip()
     enqueue(req, rabbit_ip) #TODO give IP as arg

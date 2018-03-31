@@ -10,6 +10,7 @@ class CarClient():
 		self.port = port
 		# TCP
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		# look if there is an center
 		try:
 			self.sock.connect((address,port))
 			self.start_client()
@@ -18,25 +19,29 @@ class CarClient():
 			self.sock.close()
 
 	def input_handler(self):
-		while True:
-			data = self.sock.recv(1024)
-			if not data:
-				print("stoping waiting for input")
-				break
-			print("got from server: %s\n" % data)
-			if data == str.encode("Location?"):
-				self.send_location()
+		try:
+			while True:
+				data = self.sock.recv(1024)
+				if not data:
+					print("stoping waiting for input")
+					break
+				print("got from server: %s\n" % data)
+				if data == str.encode("Location?"):
+					self.send_location()
+		finally:
+			self.sock.close()
 				
 	def start_client(self):
-		thrd = threading.Thread(target = self.input_handler)
-		# makes sure the thread stops when main stops
-		thrd.setDaemon(True)
-		thrd.start()
 		self.send_message("Alive!")
+		inputThread = threading.Thread(target = self.input_handler)
+		inputThread.setDaemon(True)
+		inputThread.start()
 
 	def send_message(self, message):
-		self.sock.send(str.encode(message))
+		self.sock.send(message.encode("utf-8"))
 
 	def send_location(self):
-		send_message(str(car.pos[0]) + ', ' + str(car.pos[1]))
+		self.send_message("Location=" +
+						  str(int(self.car.pos[0] + 0.5 + self.car.distance[0])) + ', ' +
+						  str(int(self.car.pos[1] + 0.5 + self.car.distance[1])))
 		
