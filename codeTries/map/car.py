@@ -15,11 +15,12 @@ class Car(object):
 
 		# client takes car of center input
 		self.client = CarClient(address, port, self)
-		
+		# if the car is pickingup a client
 		self.isAvailable = True
+		
 		#the place
 		self.pos = [randint(0,8), randint(0,6)]
-		# between 0 and 1
+		# between -1 and 1
 		self.distance = [0, 0]
 		
 		self.chooseRandomMovement()
@@ -30,6 +31,7 @@ class Car(object):
 		self.move()
 
 	def updateDistance(self):
+		#choose random movement at the corners
 		if self.distance[0] >= 1:
 			self.updatePos(0, 1)
 
@@ -45,7 +47,7 @@ class Car(object):
 	def updatePos(self,idx, amount):
 		self.pos[idx] = self.pos[idx] + amount
 		self.distance[idx] = 0
-		self.chooseRandomMovement()
+		self.chooseMovement()
 
 	def move(self):
 		# move north
@@ -92,6 +94,13 @@ class Car(object):
 		self.movement = list[choice]
 	
 				
+	def goto(self, data):
+		data = data.split(',')
+		self.dest1 = (data[0], data[1])
+		print("going to " + str(self.clientLocation))
+		self.dest2 = (data[2], data[1])
+		self.isAvailable = False
+		
 
 	def changeLocation(self):
 		if(self.pos!=self.dest):

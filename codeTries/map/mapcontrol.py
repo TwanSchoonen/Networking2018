@@ -30,5 +30,10 @@ class MapControl(object):
 			if event.type == pygame.MOUSEBUTTONUP:
 				print(pygame.mouse.get_pos())
 				self.model.inACenter(pygame.mouse.get_pos())
+
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_b:
+					self.model.center = -1
+
 				
 		return False

@@ -25,9 +25,13 @@ class CarClient():
 				if not data:
 					print("stoping waiting for input")
 					break
-				print("got from server: %s\n" % data)
-				if data == str.encode("Location?"):
+				stringData = data.decode("utf-8")
+				if stringData == "Location?":
 					self.send_location()
+				elif stringData.startswith("goto="):
+					self.car.goto(stringData.split("=")[1])
+				else:
+					print("got message from server: %s" % stringData)
 		finally:
 			self.sock.close()
 				

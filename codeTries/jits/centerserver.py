@@ -9,9 +9,10 @@ class CenterServer(object):
 		self.host = host
 		self.port = port
 		# list with clients and a used lock
-		self.client_list = set()
+		self.car_list = set()
 		self.client_lock = threading.Lock()
 		self.locations = []
+		self.availableCars = []
 
 	def start(self):
 		listener = threading.Thread(target = self.listener)
@@ -29,7 +30,7 @@ class CenterServer(object):
 			print("[New connection from %s:%s]:" % (address[0],address[1]))
 
 			with self.client_lock:
-				self.client_list.add(client)
+				self.car_list.add(client)
 
 			clientThread = threading.Thread(target=self.listenToClient,
 											args=(client,))
@@ -38,11 +39,13 @@ class CenterServer(object):
 
 
 	def broadcast(self, message):
-		for c in self.client_list:
+		for c in self.car_list:
 			c.send(message.encode("utf-8"))
 
 	def sendToClient(self, message, client):
-		client.send(message.encode("utf-8"))
+		if message.startwith("goto="):
+			car_list.remove(client)
+			client.send(message.encode("utf-8"))
 
 	def listenToClient(self, client):
 		try:
@@ -64,6 +67,6 @@ class CenterServer(object):
 			# connection clean up
 			with self.client_lock:
 				print("remove client")
-				self.client_list.remove(client)
+				self.car_list.remove(client)
 				client.close()
 				return False

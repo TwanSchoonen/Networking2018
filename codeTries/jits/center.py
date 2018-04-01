@@ -72,6 +72,7 @@ class Center:
 		if not self.server.locations:
 			print("no available cars...")
 			return
+
 		minDistance = Center.getDistance(clientLocation[0], clientLocation[1],
 										 self.server.locations[0][0], self.server.locations[0][1])
 		minClient = self.server.locations[0][2]
@@ -84,13 +85,8 @@ class Center:
 				minClient = location[2]
 
 		self.server.sendToClient("goto=" + clientLocation[0] + ',' + clientLocation[1] +
-								 ", dest=" + clientDestination[0] + ',' + clientDestination[1],
+								 ',' + clientDestination[0] + ',' + clientDestination[1],
 								 minClient)
-
-		
-		# print("REQUEST = ")
-		# print("based on the message by " + req.user_name + ", " + req.no_passengers + " persons have to be transported from " +
-		# 	  req.location + " to " + req.destination + ". Therefore car x is selected for the pickup")
 
 	def callback(self, ch, method, props, body):
 		print(" [x] Received %r%r" % (method.routing_key, body))
