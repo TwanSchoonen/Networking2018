@@ -59,8 +59,12 @@ class CenterServer(object):
 					coord = loc.split(", ")
 					self.locations.append((int(coord[0]), int(coord[1]), client))
 					print("got location:" + message)
+				elif (message == "available"):
+					print("car is available")
+					self.car_list.append(client)
 				else:
 					print("got from client: %s\n" % data)
+
 		except Exception as e:
 			print(e)
 		finally:

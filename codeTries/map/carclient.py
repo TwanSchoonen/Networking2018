@@ -23,7 +23,7 @@ class CarClient():
 			while True:
 				data = self.sock.recv(1024)
 				if not data:
-					print("stoping waiting for input")
+					print("stopping waiting for input")
 					break
 				stringData = data.decode("utf-8")
 				if stringData == "Location?":

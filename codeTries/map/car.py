@@ -17,13 +17,15 @@ class Car(object):
 		self.client = CarClient(address, port, self)
 		# if the car is pickingup a client
 		self.isAvailable = True
+
+		self.dest = (-1,-1)
 		
 		#the place
 		self.pos = [randint(0,8), randint(0,6)]
 		# between -1 and 1
 		self.distance = [0, 0]
 		
-		self.chooseRandomMovement()
+		self.chooseMovement()
 		# self.clientdest=clientdest
 	
 	def update(self):
@@ -66,21 +68,24 @@ class Car(object):
 		elif self.movement == Car.WEST:
 			self.distance[0] = self.distance[0] - constants.CARSPEED
 
-	def chooseRandomMovement(self):
-		possible_movement = [Car.NORTH, Car.EAST, Car.SOUTH, Car.WEST]
-		# top
-		if self.pos[1] == 0:
-			possible_movement.remove(Car.NORTH)
-		# right
-		if (self.pos[0] == 8):
-			possible_movement.remove(Car.EAST)
-		# bottom
-		if (self.pos[1] == 6):
-			possible_movement.remove(Car.SOUTH)
-		# left
-		if self.pos[0] == 0:
-			possible_movement.remove(Car.WEST)
-		self.chooseMovementIn(possible_movement)
+	def chooseMovement(self):
+		if not self.isAvailable:
+			self.gotoLocation()
+		else:
+			possible_movement = [Car.NORTH, Car.EAST, Car.SOUTH, Car.WEST]
+			# top
+			if self.pos[1] == 0:
+				possible_movement.remove(Car.NORTH)
+			# right
+			if (self.pos[0] == 8):
+				possible_movement.remove(Car.EAST)
+			# bottom
+			if (self.pos[1] == 6):
+				possible_movement.remove(Car.SOUTH)
+			# left
+			if self.pos[0] == 0:
+				possible_movement.remove(Car.WEST)
+			self.chooseMovementIn(possible_movement)
 
 	def chooseMovementIn(self, list):
 		choice = randint(0, len(list) - 1)
@@ -89,31 +94,29 @@ class Car(object):
 				
 	def goto(self, data):
 		data = data.split(',')
-		self.dest1 = (data[0], data[1])
-		print("going to " + str(self.clientLocation))
-		self.dest2 = (data[2], data[1])
+		self.dest = (int(data[0]), int(data[1]))
+		print("going to " + str(self.dest))
+		self.dest2 = (int(data[2]), int(data[3]))
 		self.isAvailable = False
 		
 
-	def changeLocation(self):
-		if(self.pos!=self.dest):
-			x=self.pos[0]
-			y=self.pos[1]
-			x1=self.dest[0]
-			y1=self.dest[1]
-			if x<x1:
-				x+=1
-			elif x>x1:
-				x-=1
-			elif y<y1:
-				y+=1
-			elif y>y1:
-				y-=1
-				self.pos=(x,y)
-		return(self.pos)
+	def gotoLocation(self):
+		x=self.pos[0]
+		y=self.pos[1]
+		x1=self.dest[0]
+		y1=self.dest[1]
+		if x<x1:
+			self.movement = Car.EAST
+		elif x>x1:
+			self.movement = Car.WEST
+		elif y<y1:
+			self.movement = Car.SOUTH
+		elif y>y1:
+			self.movement = Car.NORTH
+				
+	def makeAvailable(self):
+		self.isAvailable = True
+		client.send_message("available")
+		car.dest = (-1,-1)
+						
 	
-	def setNewDest(self,isAvailable,clientIndex,dest,clientdest):
-		self.isAvailable = isAvailable
-		self.dest = dest
-		self.clientdest=clientdest
-		self.clientIndex=clientIndex

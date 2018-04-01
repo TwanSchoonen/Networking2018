@@ -17,8 +17,23 @@ class MapModel(object):
 		if self.center != -1:
 			# only update if city is shown
 			for car in self.cars[self.center]:
-				car.update()
+				if(car.pos[0] == car.dest[0] and
+				   car.pos[1] == car.dest[1]):
+					if (car.dest[0] == car.dest2[0] and
+						car.dest[1] == car.dest2[1]):
+						print("dropped client")
+						car.makeAvailable()
+					else:
+						print("reached client")
+						for client in self.clients[self.center]:
+							if (client[0] == car.dest[0] and
+								client[1] == car.dest[1]):
+								self.clients[self.center].remove(client)
+								break
+						car.dest = car.dest2
+					car.chooseMovement()
 
+				car.update()
 
 	def addCenter(self, centerData):
 		print(centerData)
@@ -32,8 +47,11 @@ class MapModel(object):
 		
 	def addClient(self, clientData):
 		for idx in range(len(self.centers)):
-			if self.centers[idx] == clientData[2]:
-				self.clients[idx].append((int(clientData[0]), int(clientData[1])))
+			if self.centers[idx] == clientData[0]:
+				list = []
+				for x in clientData[1:]:
+					list.append(int(x))
+				self.clients[idx].append(list)
 				break
 		print(self.clients)
 

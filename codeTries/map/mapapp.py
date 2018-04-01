@@ -15,8 +15,9 @@ class MapApp(object):
 		self.control = MapControl(self.model)
 
 		#test -----
-		self.model.addCenter(["test", "1", "localhost", "1111"])
-		self.model.cars[0][0].goto("1,2,4,4")
+		# self.model.addCenter(["test", "1", "localhost", "1111"])
+		# self.model.addClient(["test", "1", "2", "4", "4"])
+		# self.model.cars[0][0].goto("1,2,4,4")
 
 
 	def start_loop(self):

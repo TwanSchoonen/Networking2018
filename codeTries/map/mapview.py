@@ -63,6 +63,7 @@ class MapView(object):
 			pygame.draw.circle(self.screen, constants.red,
 							   MapView.getMapPos(client[0], client[1]),
 							   int(constants.RECTDIST / 2))
+
 	@staticmethod		
 	def getMapPos(x, y):
 		return (int(x * (constants.RECTSIZE + constants.RECTDIST) +
