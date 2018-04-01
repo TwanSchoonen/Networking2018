@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import pika
 import time
-import uuid
 import sys
-import threading
 from centerserver import CenterServer
 from centerclient import MapSocketClient
 from car_request import Request
@@ -59,7 +57,8 @@ class Center:
 		# wait for all cars to respond
 		while len(self.server.locations) != len(self.server.car_list):
 			time.sleep(0.1)
-		
+
+		# find the closest car and send the client
 		self.findClosestCar(req.clientLocation.split(','), req.destination_location.split(','))
 
 	
@@ -69,9 +68,6 @@ class Center:
 		
 
 	def findClosestCar(self, clientLocation, clientDestination):
-		if not self.server.locations:
-			print("no available cars...")
-			return
 
 		minDistance = Center.getDistance(clientLocation[0], clientLocation[1],
 										 self.server.locations[0][0], self.server.locations[0][1])
@@ -89,11 +85,24 @@ class Center:
 								 minClient)
 
 	def callback(self, ch, method, props, body):
+		# show received message
 		print(" [x] Received %r%r" % (method.routing_key, body))
 
+		# no cars available, then wait
+		while not self.server.car_list:
+			print("waiting for cars")
+			time.sleep(1)
+
+		# parse to get result
 		req = self.request_from_string(body.decode("utf-8"))
+
+		# send to the map that there is an client
+		# so it can be drawn
 		self.mapClient.send_message("client=" + self.name + ',' + req.clientLocation + ',' + req.destination_location)
+
+		# find the car to to the work
 		self.find_car(req)
+
 		print(" [x] Done")
 
 
@@ -112,14 +121,14 @@ class Center:
 def main(argv):
 	name = input("Name of this center: ")
 	amountOfCars = int(input("How many cars do I have? "))
-	center_port = int(input("Which port should be used for this center? "))
+	center_port = int(input("Which port should be used for this center?"))
 	host = 'localhost'
 	messageIP = 'localhost'
 	if len(sys.argv) > 1:
 		messageIP = str(argv[1])
-		print("seting up connection to: " + str(argv[1]))
+		print("seting up rabbitmq connection to: " + str(argv[1]))
 	else:
-		print("connect to localhost, to connect to url add an argument")
+		print("connect rabbitmq to localhost, to connect rabbitmq to url add it as argument")
 	Center(name, messageIP, host, center_port, amountOfCars).call()
   
 if __name__== "__main__":

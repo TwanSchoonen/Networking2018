@@ -3,9 +3,9 @@ import requests
 
 headers = {'content-type': 'application/json'}
 url = 'http://127.0.0.1:5000/data'
-data = {"username":"m1gu2l","password":"python"}
+data = {"username":"miguel2","password":"python2"}
 
 res = requests.post(url, data=json.dumps(data), headers=headers)
-
+print(res)
 
 
