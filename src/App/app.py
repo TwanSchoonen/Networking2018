@@ -119,6 +119,15 @@ def delete_account(current_user):
     return False
 
 
+def show_details(current_user):
+    print("Username = " + current_user.user_name)
+    print("First name = " + current_user.first_name)
+    print("Last name = " + current_user.last_name)
+    print("Date of birth = " + current_user.birth_date)
+    print("Address = " + current_user.street_name + " " + str(current_user.house_number) + ", " + current_user.city)
+    print("Balance = " + str(current_user.balance))
+
+
 def change_details(current_user):
     opts = ["change password", "change your username", "change your first name", "change your last name",
             "change your date of birth", "change your street name", "change your house number", "change your city"]
@@ -155,14 +164,16 @@ def change_details(current_user):
 
 
 def user_details(current_user):
-    opts = ["change details", "delete account", "go back"]
-    opt = option_menu(opts, 1, 3)
+    opts = ["see details", "change details", "delete account", "go back"]
+    opt = option_menu(opts, 1, 4)
     if opt == 1:
-        change_details(current_user)
+        show_details(current_user)
     elif opt == 2:
+        change_details(current_user)
+    elif opt == 3:
         if delete_account(current_user):
             return True
-    elif opt == 3:
+    elif opt == 4:
         pass
     return False
 
@@ -202,12 +213,11 @@ def register_new_user():
 def log_in():
     auth = (input("Username: "), input("Password: "))
     res = requests.get(url, auth=auth, headers = headers)
-    while res.status_code == 401:
+    if res.status_code == 401:
         print("bad request")
-        auth = (input("Username: "), input("Password: "))
-        res = requests.get(url, auth=auth, headers=headers)
+        return '', False
     print("status code: " + str(res.status_code))
-    return local_user.User(res.json())
+    return local_user.User(res.json()), True
 
 
 def show_database():
@@ -249,7 +259,12 @@ def main(argv):
         if opt == 1:
             current_user = register_new_user()
         elif opt == 2:
-            current_user = log_in()
+            log_in_result = log_in()
+            if log_in_result[1]:
+                current_user = log_in_result[0]
+            else:
+                print("log in failed, returning to main")
+                continue
         elif opt == 3:
             new_server_ip()
             # go through this menu again
