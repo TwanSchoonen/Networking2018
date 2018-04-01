@@ -33,8 +33,8 @@ class MapView(object):
 			pos = constants.CENTERPROPS[idx][1]
 			pygame.draw.circle(self.screen, color, pos,
 							   constants.CENTERRADIUS)
-			textsurface = self.font.render('Some Text', False, (0, 0, 0))
-			self.screen.blit(textsurface, (pos[0]-(constants.CENTERRADIUS/2),pos[1]))
+			textsurface = self.font.render(self.model.centers[idx], False, (0, 0, 0))
+			self.screen.blit(textsurface, (pos[0]-constants.CENTERRADIUS+10, pos[1]-(MapView.FONTSIZE/2)))
 		# 	self.screen.blit(
 		# 		self.font.render(
 		# 			self.centers[idx], True, black

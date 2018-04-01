@@ -103,7 +103,7 @@ def new_request(user):
     req = Request(user.user_name, centerLocation, clientLocation, no_passengers, destination_center, destination_location)
 
     rabbit_ip = choose_ip()
-    enqueue(req, rabbit_ip)
+    enqueue(req, rabbit_ip) #TODO give IP as arg
 
     print("New request sent: " + req.to_string())
 
