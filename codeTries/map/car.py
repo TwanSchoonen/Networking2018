@@ -116,7 +116,7 @@ class Car(object):
 				
 	def makeAvailable(self):
 		self.isAvailable = True
-		client.send_message("available")
-		car.dest = (-1,-1)
+		self.client.send_message("available")
+		self.dest = (-1,-1)
 						
 	

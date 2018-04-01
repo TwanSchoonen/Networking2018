@@ -57,7 +57,7 @@ class Center:
 		self.server.broadcast("Location?")
 
 		# wait for all cars to respond
-		while len(self.server.locations) != len(self.server.client_list):
+		while len(self.server.locations) != len(self.server.car_list):
 			time.sleep(0.1)
 		
 		self.findClosestCar(req.clientLocation.split(','), req.destination_location.split(','))
@@ -92,7 +92,7 @@ class Center:
 		print(" [x] Received %r%r" % (method.routing_key, body))
 
 		req = self.request_from_string(body.decode("utf-8"))
-		self.mapClient.send_message("client=" + req.clientLocation + ',' + self.name)
+		self.mapClient.send_message("client=" + self.name + ',' + req.clientLocation + ',' + req.destination_location)
 		self.find_car(req)
 		print(" [x] Done")
 

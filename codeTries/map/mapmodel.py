@@ -46,6 +46,7 @@ class MapModel(object):
 		self.cars.append(list)
 		
 	def addClient(self, clientData):
+		print(clientData)
 		for idx in range(len(self.centers)):
 			if self.centers[idx] == clientData[0]:
 				list = []

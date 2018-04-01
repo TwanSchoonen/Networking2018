@@ -46,8 +46,8 @@ class CenterServer(object):
 			c.send(message.encode("utf-8"))
 
 	def sendToClient(self, message, client):
-		if message.startwith("goto="):
-			car_list.remove(client)
+		if message.startswith("goto="):
+			self.car_list.remove(client)
 			client.send(message.encode("utf-8"))
 
 	def listenToClient(self, client):
@@ -64,7 +64,7 @@ class CenterServer(object):
 					print("got location:" + message)
 				elif (message == "available"):
 					print("car is available")
-					self.car_list.append(client)
+					self.car_list.add(client)
 				else:
 					print("got from client: %s\n" % data)
 
