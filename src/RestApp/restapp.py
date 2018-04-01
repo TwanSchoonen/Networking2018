@@ -17,7 +17,6 @@ def create_app():
 def setup_database(app):
     with app.app_context():
         db.create_all()
-    
 
 if __name__ == '__main__':
     app = create_app()
@@ -26,6 +25,6 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         app.run(host='0.0.0.0')
     else:
-        print("running debug mode enter argument for server")
+        print("running debug mode, enter argument for server")
         app.debug = True
         app.run()

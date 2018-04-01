@@ -30,18 +30,6 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
-    
-    # @staticmethod
-    # def verify_auth_token(token):
-    #     s = Serializer(app.config['SECRET_KEY'])
-    #     try:
-    #         data = s.loads(token)
-    #     except SignatureExpired:
-    #         return None    # valid token, but expired
-    #     except BadSignature:
-    #         return None    # invalid token
-    #     user = User.query.get(data['id'])
-    #     return user
 
 
 
