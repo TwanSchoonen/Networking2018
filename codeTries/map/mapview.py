@@ -12,6 +12,7 @@ class MapView(object):
 		self.model = model
 		self.screen = pygame.display.set_mode((constants.MAPWIDTH,
 											   constants.MAPHEIGHT))
+		pygame.font.init()
 		self.font = pygame.font.SysFont('fontawesome5free',
 										MapView.FONTSIZE)
 
@@ -32,6 +33,8 @@ class MapView(object):
 			pos = constants.CENTERPROPS[idx][1]
 			pygame.draw.circle(self.screen, color, pos,
 							   constants.CENTERRADIUS)
+			textsurface = self.font.render('Some Text', False, (0, 0, 0))
+			self.screen.blit(textsurface, (pos[0]-(constants.CENTERRADIUS/2),pos[1]))
 		# 	self.screen.blit(
 		# 		self.font.render(
 		# 			self.centers[idx], True, black

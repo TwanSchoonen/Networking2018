@@ -111,14 +111,16 @@ class Center:
 
 def main(argv):
 	name = input("Name of this center: ")
-	amountOfCars = int(input("How many cars do i have? "))
+	amountOfCars = int(input("How many cars do I have? "))
+	center_port = int(input("Which port should be used for this center? "))
+	host = 'localhost'
 	messageIP = 'localhost'
 	if len(sys.argv) > 1:
 		messageIP = str(argv[1])
 		print("seting up connection to: " + str(argv[1]))
 	else:
 		print("connect to localhost, to connect to url add an argument")
-	Center(name, messageIP, 'localhost', 5555, amountOfCars).call()
+	Center(name, messageIP, host, center_port, amountOfCars).call()
   
 if __name__== "__main__":
 	main(sys.argv)
