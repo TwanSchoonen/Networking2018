@@ -15,7 +15,7 @@ class MapApp(object):
 		self.control = MapControl(self.model)
 
 		#test -----
-		self.model.addCenter(["test", "1", "localhost", "1111"])
+		# self.model.addCenter(["test", "1", "127.0.0.1", "1111"])
 
 
 	def start_loop(self):

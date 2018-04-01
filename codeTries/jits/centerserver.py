@@ -21,7 +21,10 @@ class CenterServer(object):
 	def listener(self):
 		print("starting server on %s:%s" % (self.host, self.port))
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		sock.bind((self.host, self.port))
+		try:
+			sock.bind((self.host, self.port))
+		except Exception as e:
+			print("Problem making new server on this port. Exception: " + str(e))
 		sock.listen(5)
 
 		while True:
