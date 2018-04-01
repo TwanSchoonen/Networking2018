@@ -67,27 +67,20 @@ class Car(object):
 			self.distance[0] = self.distance[0] - constants.CARSPEED
 
 	def chooseRandomMovement(self):
-		# # in left uppper corner
-		# if self.pos[0] == 0 and self.pos[1] == 0:
-		# 	chooseMovementIn([Car.EAST, Car.SOUTH])
-		# on top
+		possible_movement = [Car.NORTH, Car.EAST, Car.SOUTH, Car.WEST]
+		# top
 		if self.pos[1] == 0:
-			self.chooseMovementIn([Car.EAST, Car.SOUTH, Car.WEST])
+			possible_movement.remove(Car.NORTH)
 		# right
-		elif (self.pos[0] == 8):
-			self.chooseMovementIn([Car.NORTH, Car.SOUTH, Car.WEST])
-		# # bottom
-		elif (self.pos[1] == 6):
-			self.chooseMovementIn([Car.NORTH, Car.EAST, Car.WEST])
+		if (self.pos[0] == 8):
+			possible_movement.remove(Car.EAST)
+		# bottom
+		if (self.pos[1] == 6):
+			possible_movement.remove(Car.SOUTH)
 		# left
-		elif self.pos[0] == 0:
-			self.chooseMovementIn([Car.NORTH, Car.EAST, Car.SOUTH])
-		# elif (self.getMapPos()[0] >= constants.MAPWIDTH and
-		# self.getMapPos()[0] >= constants.MAPWIDTH):
-		# 	pass
-		# elif self.getMapPos()[0] >= constants.MAPWID:
-		else:
-			self.chooseMovementIn([Car.NORTH, Car.EAST, Car.SOUTH, Car.WEST])
+		if self.pos[0] == 0:
+			possible_movement.remove(Car.WEST)
+		self.chooseMovementIn(possible_movement)
 
 	def chooseMovementIn(self, list):
 		choice = randint(0, len(list) - 1)

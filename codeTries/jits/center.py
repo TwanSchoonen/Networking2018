@@ -47,7 +47,7 @@ class Center:
 	def request_from_string(self, message):
 		print(message)
 		msg = message.split(', ')
-		req = Request(msg[0], msg[1], msg[2], msg[3], msg[4])
+		req = Request(msg[0], msg[1], msg[2], msg[3], msg[4], msg[5])
 		return req
 
 	def find_car(self, req):
@@ -60,7 +60,7 @@ class Center:
 		while len(self.server.locations) != len(self.server.client_list):
 			time.sleep(0.1)
 		
-		self.findClosestCar(req.clientLocation.split(','), req.destination.split(','))
+		self.findClosestCar(req.clientLocation.split(','), req.destination_location.split(','))
 
 	
 	@staticmethod
@@ -111,7 +111,7 @@ class Center:
 
 def main(argv):
 	name = input("Name of this center: ")
-	amountOfCars = int(input("How many cars do i have?"))
+	amountOfCars = int(input("How many cars do i have? "))
 	messageIP = 'localhost'
 	if len(sys.argv) > 1:
 		messageIP = str(argv[1])
