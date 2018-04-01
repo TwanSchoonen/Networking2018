@@ -64,51 +64,48 @@ def choose_ip():
         return rabbit_ip
 
 
+def wrong_pos(pos, low, high):
+    if pos < low or pos > high:
+        return True
+    return False
+
+
+def correct_xy_coordinate(location):
+    xy_pos = location.split(',')
+    if not len(xy_pos) == 2:
+        return False
+    if not (represents_int(xy_pos[0]) and represents_int(xy_pos[1])):
+        return False
+    if wrong_pos(int(xy_pos[0]), 0, 8) or wrong_pos(int(xy_pos[1]), 0, 6):
+        return False
+    return True
+
+
+def get_location_xy(request_string):
+    location = input(request_string)
+    while not correct_xy_coordinate(location):
+        location = input("Wrong input, try again. " + request_string)
+    return location
+
+
 def new_request(user):
 
     print("Creating a new request...")
-    centerLocation = input("Center location: ")
-    clientLocation = input("client location 'x,y': ")
+    centerLocation = input("Center name: ")
+    clientLocation = get_location_xy("Client location 'x,y': ")
     no_passengers = input("Number of passengers: ")
     while illegal_option(no_passengers, 1, 3):
         print("Number of passengers (" + no_passengers + ") illegal. Please enter a number between 1 and 3.")
         no_passengers = input("Number of passengers: ")
-    destination = input("Destination: ")
+    destination_center = input("Destination center name: ")
+    destination_location = get_location_xy("Destination location 'x,y': ")
     
-    req = Request(user.user_name, centerLocation, clientLocation, no_passengers, destination)
+    req = Request(user.user_name, centerLocation, clientLocation, no_passengers, destination_center, destination_location)
 
     rabbit_ip = choose_ip()
-    enqueue(req, rabbit_ip) #TODO give IP as arg
+    enqueue(req, rabbit_ip)
 
     print("New request sent: " + req.to_string())
-
-
-def create_new_user(nm):
-    print("Creating new user " + nm + "...")
-    userID = str(20)
-    new_user = {
-        "balance": "100",
-        "bankNumber": "JC44-5356-4200",
-        "dateOfRegister": "21/3/2018",
-        "firstName": nm,
-        "lastLogin": "21/3/2018",
-        "lastName": input("Last name: "),
-        "telephone": input("Phone number: "),
-        'usrId': userID,
-    }
-    return jsonify({'user': new_user}), 201
-
-
-def track_ride():
-    print("Tracking ride...")
-
-
-def show_map():
-    print("Showing map...")
-
-
-def switch_user():
-    print("Switch user")
 
 
 def delete_account(current_user):
@@ -264,17 +261,13 @@ def main(argv):
         log_out = False
         while True:
             print("\nCurrently logged in as " + current_user.user_name)
-            opts = ["request a new ride", "track your ride", "see the map", "see/change your account details", "log out"]
-            opt = option_menu(opts, 1, 5)
+            opts = ["request a new ride", "see/change your account details", "log out"]
+            opt = option_menu(opts, 1, 3)
             if opt == 1:
                 new_request(current_user)
             elif opt == 2:
-                track_ride()
-            elif opt == 3:
-                show_map()
-            elif opt == 4:
                 log_out = user_details(current_user)
-            elif opt == 5:
+            elif opt == 3:
                 log_out = True
             if log_out:
                 print("Logging out...")
