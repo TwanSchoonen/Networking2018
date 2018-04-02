@@ -1,10 +1,10 @@
 #+BEGIN_SRC plantuml :file orderCar.png
-loop over Center in centerlist
-App -> Center : bool correctCenter = center.isInArea(client.location) 
-end
-opt correctCenter == true
-  App->Center: orderCar(Client,numberOfPassengers,destination)
-  Center->Center: enqueue(Client,numberOfPassengers,destination)
+[o -> App : request = orderCar(Client, location, numberOfPassengers, destination)
+App -> MessageQueue : enqueue(request, key = location)
+opt for center were key = location
+  Center->MessageQueue: request = dequeue(request)
+  for
+  Center->Car: goto(loction,destination)
 end
 
 #+END_SRC

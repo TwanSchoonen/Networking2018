@@ -1,10 +1,10 @@
 #+begin_src plantuml :file registerClient.png
 @startuml
-[o->App : SignUp(int[] optionArray, double balance)
+[o->App : createNewUser(details)
 create "Client"
-App -> Client : client = createClient(int[] optionArray, double balance)
+App -> Client : client = createClient(details)
 App -> Client : client.serialize()
-App -> Database : put(client)
+App -> Database : post(client)
 @enduml
 #+END_SRC
 
