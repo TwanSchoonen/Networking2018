@@ -86,10 +86,9 @@ class Client {
 }
 
 App "1" -- "*" Client
-App "1" -- "*" Request
-Request "1" -- "*" Center
+App "1" -- "1" Request
+App "1" -- "*" Center
 Center "1" -- "*" Car
-Center "1" -- "1" Area
 App "1" -- "1" Database
 Database "1" -- "*" Client
 
