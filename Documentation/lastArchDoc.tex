@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage[parfill]{parskip}
+\usepackage{hyperref}
 \lstset{language=Java,
   numberstyle=\footnotesize,
   basicstyle=\footnotesize,
@@ -16,11 +17,10 @@
   breaklines=true
 }
 
-
 \begin{document}
 
 \title{Net-computing\\
-Architectural design document\\
+Final report\\
 Smart car on demand
 }
 
@@ -99,4 +99,8 @@ The client requests to sign up. App creates new object Client with the client's 
 \includegraphics[width=1\textwidth]{../Diagrams/orderCar.png}\\
 When a costumer orders a car, the app pushes this request to the message queue.
 The correct center then pops this request, looks if cars are available. If not the center waits until a car signals that it is available again. For all available cars the center asks their locations, and picks the smallest. The car belonging to the smallest distance, is then send to the client location.
+
+\section*{Appendix}
+The source code can be found in the following git repository: \url{https://github.com/TwanSchoonen/Networking2018.git}.
+
 \end{document}
