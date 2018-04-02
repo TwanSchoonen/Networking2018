@@ -115,7 +115,6 @@ def delete_account(current_user):
     print(res)
     if res.status_code == 201:
         return True
-
     return False
 
 
@@ -160,7 +159,7 @@ def change_details(current_user):
         current_user.city = input("Please enter your new city of residence: ")
         data = current_user.get_json(pw)
 
-    requests.put(url, data=json.dumps(data), auth=auth, headers=headers)
+    requests.put(url, data=data, auth=auth, headers=headers)
 
 
 def user_details(current_user):
@@ -245,6 +244,7 @@ def show_admin_options():
 def new_server_ip():
     global url
     new_url = input("Give the new ip that should be used for the server: ")
+    new_url = "http://" + new_url + ":5000/data"
     url = new_url
 
 

@@ -86,14 +86,33 @@ def delete_all_users():
 @people.route('/data', methods=['PUT'])
 @auth.login_required
 def put_user():
+
     user = User.query.filter_by(username=g.user.username).first()
+
     if not request.json:
         abort(400)
-    # if 'username' in request.json and type(request.json['username']) != unicode:
-    #     abort(400)
-    
-    user.username = request.json.get('username')
-    user.hash_password(request.json.get('password'))
+
+    username = request.json.get('username')
+    first_name = request.json.get('firstname')
+    last_name = request.json.get('lastname')
+    birth_date = request.json.get('birthdate')
+    street_name = request.json.get('streetname')
+    house_number = request.json.get('housenumber')
+    city = request.json.get('city')
+    balance = request.json.get('balance')
+    password = request.json.get('password')
+
+    if username is None or password is None or first_name is None or last_name is None or birth_date is None or street_name is None or house_number is None or city is None or balance is None:
+        abort(400)  # missing arguments
+    user.username = username
+    user.first_name = first_name
+    user.last_name = last_name
+    user.birth_date = birth_date
+    user.street_name = street_name
+    user.house_number = house_number
+    user.city = city
+    user.balance = balance
+    user.hash_password(password)
 
     db.session.commit()
     return jsonify({'user' : user.username}), 201

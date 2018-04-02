@@ -5,21 +5,40 @@ skinparam {
 }
 
 class Car {
-  Point Position
+  Client client
   bool available
-  int numberOfPassengers
-  socket
+  Point destination
+  Point position
+  tuple distance
 
+  update()
+  updateDistance()
+  updatePos()
+  move()
+  chooseMovement()
+  chooseMovementIn(list possibleMoves)
+  goto(list data)
+  gotoLocation()
+  makeAvailable
   findRoute(Point destination)
-}
 
-class Area {
-  Point[] border
-  
 }
 
 class Center {
+  String name
+  String address
+  String port
+  int amountOfCars
+  server
+  mapClient
   messageQueue
+
+  find_car(Request req)
+  findClosestCar(Point location, Point destination)
+  popFromQueue()
+  main()
+
+
 
   enqueue(Client client, int numberOfPassengers, Point destination)
   dequeue(Client client, int numberOfPassengers, Point destination)
