@@ -50,7 +50,10 @@ class MapView(object):
 		cars = self.model.cars[self.model.center]
 
 		for car in cars:
-			pygame.draw.circle(self.screen, constants.black,
+			color = constants.black
+			if not car.isAvailable:
+				color = constants.darkred
+			pygame.draw.circle(self.screen, color,
 							   MapView.getMapPos(car.pos[0] + car.distance[0],
 												 car.pos[1] + car.distance[1]),
 							   int(constants.RECTDIST / 2))

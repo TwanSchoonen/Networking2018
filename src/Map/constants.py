@@ -12,6 +12,7 @@ olive = (128,128,0)
 green = (0,128,0)
 orange = (255,165,0)
 navy = (0,0,128)
+darkred = (100,0,0)
 
 CENTERPROPS = [
 	(red, (int(MAPWIDTH * 0.3), int(MAPHEIGHT * 0.3))),
