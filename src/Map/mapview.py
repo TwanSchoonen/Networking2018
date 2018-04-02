@@ -35,11 +35,6 @@ class MapView(object):
 							   constants.CENTERRADIUS)
 			textsurface = self.font.render(self.model.centers[idx], False, (0, 0, 0))
 			self.screen.blit(textsurface, (pos[0]-constants.CENTERRADIUS+10, pos[1]-(MapView.FONTSIZE/2)))
-		# 	self.screen.blit(
-		# 		self.font.render(
-		# 			self.centers[idx], True, black
-		# 		), pos)
-		# pygame.draw.circle(self.screen, self.c2_color, self.c2_pos, 50)
 		
 	def drawCenter(self):
 		y_pos = constants.RECTDIST
@@ -63,10 +58,14 @@ class MapView(object):
 		clients = self.model.clients[self.model.center]
 
 		for client in clients:
-			pygame.draw.circle(self.screen, constants.red,
-							   MapView.getMapPos(client[0], client[1]),
-							   int(constants.RECTDIST / 2))
+			if client[4]:
+				pygame.draw.circle(self.screen, constants.red,
+								   MapView.getMapPos(client[0], client[1]),
+								   int(constants.RECTDIST / 2))
 
+			pygame.draw.circle(self.screen, constants.green,
+							   MapView.getMapPos(client[2], client[3]),
+							   int(constants.RECTDIST / 2))
 	@staticmethod		
 	def getMapPos(x, y):
 		return (int(x * (constants.RECTSIZE + constants.RECTDIST) +

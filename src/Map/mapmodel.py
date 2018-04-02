@@ -21,15 +21,21 @@ class MapModel(object):
 				   car.pos[1] == car.dest[1]):
 					if (car.dest[0] == car.dest2[0] and
 						car.dest[1] == car.dest2[1]):
+
+						for client in self.clients[self.center]:
+							if (client[2] == car.dest2[0] and
+								client[3] == car.dest2[1]):
+								self.clients[self.center].remove(client)
+								break
 						print("dropped client")
 						car.makeAvailable()
 					else:
-						print("reached client")
 						for client in self.clients[self.center]:
 							if (client[0] == car.dest[0] and
 								client[1] == car.dest[1]):
-								self.clients[self.center].remove(client)
+								client[4] = False
 								break
+						print("reached client")
 						car.dest = car.dest2
 					car.chooseMovement()
 
@@ -52,6 +58,7 @@ class MapModel(object):
 				list = []
 				for x in clientData[1:]:
 					list.append(int(x))
+				list.append(True)
 				self.clients[idx].append(list)
 				break
 		print(self.clients)
