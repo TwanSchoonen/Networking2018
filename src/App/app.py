@@ -8,8 +8,6 @@ from flask import jsonify
 import sys
 
 
-# url = "http://145.97.184.144:5000/data" #default url
-
 url = "http://127.0.0.1:5000/data"  # default REST url
 default_rabbit_url = "localhost"
 
