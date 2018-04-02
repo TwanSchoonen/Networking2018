@@ -64,7 +64,17 @@ The requirements that are implemented in this project are listed as follows:
 \textbf{P2P topology:} This method was planned to be used for center to center communication, so when a car leaves the district or city, the centers communicate with each other and update cars lists. Eventually, we decided not to implement it since we don't have the time to test it.
 
 \section*{Program design}
-To complete this project, we decided to use the language Python. The reason behind this decision is that Python includes countless libraries to help programmers deliver products without the need to worry about writing algorithms that take care of basic functionality. More specifically, our program includes the libraries socket-for sending socket messages, threading-for handling sockets, pika-used for message queuing, flask-for REST, flast\_httpauth-for authentication, flask\_sqlalchemy-for database, passlib.apps-for password hashing ,pygame-for graphical representation of the project.
+To complete this project, we decided to use the language Python. The reason behind this decision is that Python includes countless libraries to help programmers deliver products without the need to worry about writing algorithms that take care of basic functionality. More specifically, our program includes the following libraries:
+\begin{itemize}
+	\item \textbf{socket:} used for sending socket messages.
+	\item \textbf{threading:} for handling sockets.
+	\item \textbf{pika:} used for message queuing.
+	\item \textbf{flask:} for REST.
+	\item \textbf{flast\_httpauth:} for authentication.
+	\item \textbf{flask\_sqlalchemy:} for database.
+	\item \textbf{passlib.apps:} for password hashing.
+	\item \textbf{pygame:} for graphical representation of the project.
+\end{itemize}
 \\The way our project is designed, four scripts are used, these scripts are communicating with each other using networking. 
 \begin{enumerate}
     \item The first script is the REST app (path: src/RestApp/restapp.py), that is used as the server for client management. It uses database and authentication, and stores only password hashes. However, authentication requests are done in plain text, making the connection not entirely secured. This script runs on port 5000 on localhost unless an argument is added when running the script, then the script runs on address 0.0.0.
