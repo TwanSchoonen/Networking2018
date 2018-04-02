@@ -1,10 +1,14 @@
 #+BEGIN_SRC plantuml :file orderCar.png
-[o -> App : request = orderCar(Client, location, numberOfPassengers, destination)
+[o->App : request = orderCar(Client, location, numberOfPassengers, destination)
 App -> MessageQueue : enqueue(request, key = location)
 opt for center were key = location
   Center->MessageQueue: request = dequeue(request)
-  for
-  Center->Car: goto(loction,destination)
+  loop for Car in car_list
+    Center->Car: location = sendMessage("Locations?")
+	Center->Center: addToList(location)
+  end
+  Center->Center: car = getSmallestDistance(locations)
+  Center->"car:Car": goto(location, destination)
 end
 
 #+END_SRC

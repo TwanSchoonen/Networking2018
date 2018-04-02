@@ -94,13 +94,9 @@ To complete this project, we decided to use the language Python. The reason behi
 \section*{Sequence diagrams}
 \subsection*{RegisterClient}
 \includegraphics[width=1\textwidth]{../Diagrams/registerClient.png}\\
-The client requests to sign up. App creates new object Client with the client's data that contains their personal preferences and money balance in the account. Client object is serialized and put in the database.
-
+The client requests to sign up. App creates new object Client with the client's data that contains their personal preferences and money balance in the account. Client object is serialized and put in the database. 
 \subsection*{OrderCar}
 \includegraphics[width=1\textwidth]{../Diagrams/orderCar.png}\\
-When a costumer orders a car, the app first checks in which area the costumer is, to know to which center it should send the order. The app then sends the order that has the object Client, the number of passengers, and the destination to the center. The center enqueues the order.
-\subsection*{SendCar}
-\includegraphics[width=1\textwidth]{../Diagrams/sendCar.png}\\
-The entire use case starts only if queue is not empty. Center dequeues order. If there are no available cars, the center waits, and after this loop is terminated, it looks over the list of available cars, and finds the available car that is the closest to the client's location. The center sends the order to the car it found. The center checks if the destination is in its area, if not, the center sends the destination to all centers to check which one covers the area, and the car is removed from the list of the first center and entered to the list of the second center. 
-
+When a costumer orders a car, the app pushes this request to the message queue.
+The correct center then pops this request, looks if cars are available. If not the center waits until a car signals that it is available again. For all available cars the center asks their locations, and picks the smallest. The car belonging to the smallest distance, is then send to the client location.
 \end{document}
