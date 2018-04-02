@@ -34,6 +34,7 @@ class MapModel(object):
 							if (client[0] == car.dest[0] and
 								client[1] == car.dest[1]):
 								client[4] = False
+								print("Client 4 set to false")
 								break
 						print("reached client")
 						car.dest = car.dest2
