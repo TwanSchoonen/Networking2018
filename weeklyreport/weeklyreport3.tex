@@ -1,0 +1,140 @@
+\documentclass[a4paper]{article}
+\usepackage{amsfonts}
+\usepackage{a4wide,times}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset{language=Java,
+  numberstyle=\footnotesize,
+  basicstyle=\footnotesize,
+  numbers= left,
+  stepnumber=1,
+  tabsize=2,
+  frame=shadowbox,
+  breaklines=true
+}
+
+
+\begin{document}
+
+\title{Net-computing\\
+Weekly progress report \#3
+}
+
+\date{13.3.2018}
+
+\author{Peri Rahamin (s2683423),\\
+Jits Schilperoort (s2788659),\\
+Twan Schoonen (s2756978)
+}
+
+
+\maketitle
+\section*{Week 3}
+\subsection*{Overview}
+\begin{itemize}
+	\item
+\end{itemize}
+
+\subsection*{Tasks}
+\subsubsection*{Done}
+\begin{itemize}
+    \item
+\end{itemize}
+
+\subsubsection*{Future}
+\begin{itemize}
+    \item 
+\end{itemize}
+
+\subsection*{Work division}
+\begin{itemize}
+	\item We worked on it together during the lab and also made another appointment. In total we worked on the project around x hours. 
+	\item All: 
+    \item Peri:
+    \item Jits:
+    \item Twan:
+\end{itemize}
+
+
+\section*{Week 2}
+\subsection*{Overview}
+\begin{itemize}
+	\item \textbf{Architectural design} This week we mainly focused on the architectural design of the project, a document with this design is supposed to be handed in this week.
+	\item \textbf{P2P}  Furthermore we discussed the way in which we think we should implement the communication between subjects of the system. It was suggested to us to think about p2p communication which we first considered in car2car communication. We found out that this would not be very efficient in our case (in autonomous driving it would, but we will not implement that). So now we considered implementing p2p as communication between multiple centers. Each district would have its own center which can communicate with the centers in other districts (p2p) in the case of interdistrict transportation.  
+	\item \textbf{Car sharing} We also considered the possibility of car sharing. Whenever a car is occupied but it is the nearest car to a new costumer, it should be possible to have the option of putting multiple customers in the same car. 
+	\item \textbf{Car hopping} Another extension of the system includes the possibility of car hopping. Especially in long drives it could be more efficient to put people together. So when, for example, two people have to go from district A to district B but they are at different positions in district A, they can be brought together and put in one car.
+	\item \textbf{Queue priority} When it has to be decided which customer has to be picked up by a certain car, some customers can have higher priority than others based on e.g. distance to the car and waiting time. 
+	
+\end{itemize}
+
+
+\subsection*{Tasks}
+\subsubsection*{Done}
+\begin{itemize}
+    \item Decided on the way the central, the cars and the clients should communicate with each other
+    \item Architectural design document
+    \item Created more use cases
+    \item Consider Star and P2P
+    \item Reconsidered our view on car2car communication
+    \item Extended the idea of the system with car sharing and hopping
+\end{itemize}
+
+\subsubsection*{Future}
+\begin{itemize}
+    \item Process any feedback on the architectural design
+    \item Practice with RabbitMQ
+	\item Start looking for python libraries relevant to our system
+    \item Start on the actual implementation of the system
+    \item Think a little more about the queue prioritization 
+\end{itemize}
+
+\subsection*{Work division}
+\begin{itemize}
+	\item We worked on it together during the lab and also made another appointment. In total we worked on the project around 5 hours. 
+	\item All: Discussed new ways of implementations. 
+    \item Peri: Mainly worked on architectural design
+    \item Jits: Mainly worked on the weekly progress
+    \item Twan: Mainly worked on architectural design
+\end{itemize}
+
+\section*{Week 1}
+\subsection*{Overview}
+This week we focused on the correct way of implementing the system. The complete project consists of a mobile application, Artificial Intelligence technologies, shortest distance calculations, wireless communication. We decided it is necessary to identify the parts of the system that are relevant for this course and, because of lack of time, implement these parts of the system alone.
+\\\\We analyzed each element of the system to decide on relevance:
+\begin{itemize}
+    \item \textbf{Mobile application:} Each costumer that is interested in getting a car to drive them uses a mobile app to make the order. A working app with an user friendly GUI is irrelevant for this course, so we decided to have some data structure that represents a user and has location and number of people who want to use the service instead.
+    \item \textbf{AI:} The automated driving cars should know how to drive on roads without the help of humans. The AI of the car should follow the law and consider other cars (agents) or people crossing the road in its surrounding. This part is obviously too much to implement, and since it is also irrelevant to this course, we decided to assume the AI works.
+    \item \textbf{Shortest distance algorithm:} We want the car to find the best route to reach its costumer, considering traffic and other parameters (such as construction that blocks the road). The algorithm helps deciding which car is most suitable to get to a costumer, in case there are few of them in different parts of the district. To make this work we need live data, so for this project, we only send messages with datasets we made ourselves, and leave out the complicated calculations.
+    \item \textbf{Wireless communication:} The cars should communicate with the center and with each other, deciding which costumer to get to first. We will implement this part of the system, that covers socket and message queuing.
+\end{itemize}
+
+\subsection*{Tasks}
+At the moment, we have made decisions about what we should implement and how, this of course might be subject to changes, but for now we have a direction we can follow.
+
+\subsubsection*{Done}
+\begin{itemize}
+    \item Have an overview of the complete project.
+    \item Idea description document.
+    \item Deciding on programming language for the project (python).
+\end{itemize}
+
+\subsubsection*{Future}
+This section will be more detailed as we move forward with the project.
+\begin{itemize}
+    \item Architectural design document
+    \item Car-Center communication.
+    \item Car-Costumer communication.
+    \item Car-Car communication.
+\end{itemize}
+
+\subsection*{Work division}
+So far, almost all of the work was done in meetings we had, where we discussed about how we should approach the problem. This week each member of the group invested between 3 to 4 hours.
+\begin{itemize}
+    \item Peri: Group meetings+documentation.
+    \item Jits: Group meetings+documentation.
+    \item Twan: Group meeting+initial version of the idea for project.
+\end{itemize}
+
+\end{document}
+
