@@ -12,15 +12,15 @@ class Car {
   tuple distance
 
   update()
-  updateDistance()
-  updatePos()
+  update_distance()
+  update_pos()
   move()
-  chooseMovement()
-  chooseMovementIn(list possibleMoves)
-  goto(list data)
-  gotoLocation()
-  makeAvailable
-  findRoute(Point destination)
+  choose_movement()
+  choose_movement_in(list possible_moves)
+  go_to(list data)
+  go_to_location()
+  make_available
+  find_route(Point destination)
 
 }
 
@@ -28,24 +28,24 @@ class Center {
   String name
   String address
   String port
-  int amountOfCars
+  int amount_of_cars
   CenterServer server
-  mapSocketClient mapClient
-  messageQueue
+  MapSocketClient map_client
+  message_queue
 
   find_car(Request req)
-  findClosestCar(Point location, Point destination)
-  popFromQueue()
+  find_losest_car(Point location, Point destination)
+  pop_from_queue()
   main()
 
 }
 
 class Database {
   REST support
-  getClientInformation(String username, String password);
-  putClientInformation(Client client, String password)
-  postClientInformation(Client client, String password)
-  deleteClientInformation(String username, String password)
+  get_client_information(String user_name, String password);
+  put_client_information(Client client, String password)
+  post_client_information(Client client, String password)
+  delete_client_information(String user_name, String password)
 }
 
 class App {
@@ -59,9 +59,9 @@ class App {
 }
 
 class Request {
-  String username
-  String centerLocation
-  Point clientLocation
+  String user_name
+  String location_center
+  Point client_location
   int no_passengers
   String destination_center
   Point destination_location
@@ -72,7 +72,7 @@ class Request {
 
 class Client {
   String id
-  String username
+  String user_name
   String first_name
   String last_name
   String birth_date
@@ -85,10 +85,24 @@ class Client {
   serialize()
 }
 
+class Map {
+  Mapmodel model
+  MapView view
+  MapControl control
+
+  add_client(Client client)
+  add_center(Center center)
+  add_cars(Car[] cars)
+  draw_main(Center[] centers)
+  draw_center(Car[] cars, Client[] clients)
+}
+
 App "1" -- "*" Client
 App "1" -- "1" Request
 App "1" -- "*" Center
 Center "1" -- "*" Car
+Center "*" -- "1" Map
+Map "1" -- "*" Car
 App "1" -- "1" Database
 Database "1" -- "*" Client
 
