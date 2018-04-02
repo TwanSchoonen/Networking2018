@@ -119,7 +119,7 @@ class Center:
 
 
 def main(argv):
-	name = input("Name of this center: ")
+	name = str(input("Name of this center: "))
 	amountOfCars = int(input("How many cars do I have? "))
 	center_port = int(input("Which port should be used for this center?"))
 	host = 'localhost'
